@@ -96,4 +96,30 @@ int colide (float x, float y, int porta_travada){
             bloqueado(x+m, y+m, porta_travada);
 }
 
+int main(void) {
+    InitWindow(COLUNAS * TAM, LINHAS * TAM, "Nodefall");
+    SetTargetFPS(60);
+
+    while (!WindowShouldClose()) {
+        BeginDrawing();
+        ClearBackground(BLACK);
+
+        for (int l = 0; l < LINHAS; l++) {
+            for (int c = 0; c < COLUNAS; c++) {
+                Color cor;
+                if (sala[l][c] == '#') cor = DARKGRAY;
+                else if (sala[l][c] == 'P') cor = BROWN;
+                else cor = BEIGE;
+
+                DrawRectangle(c * TAM, l * TAM, TAM, TAM, cor);
+            }
+        }
+
+        EndDrawing();
+    }
+
+    CloseWindow();
+    return 0;
+}
+
 

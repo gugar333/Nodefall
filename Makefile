@@ -1,9 +1,10 @@
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Werror -g -I$(INCLUDE_DIR)
+CFLAGS = -Wall -Werror -g -I$(INCLUDE_DIR) -IC:/raylib/raylib/src
+LDFLAGS = -LC:/raylib/raylib/src -lraylib -lgdi32 -lwinmm
 
 #project name
-PROJ_NAME = cli-lib-example
+PROJ_NAME = nodefall
 
 # Target directories
 BUILD_DIR   = build
@@ -18,7 +19,7 @@ OBJ_FILES = $(SRC_FILES:%.c=$(OBJ_DIR)/%.o)
 # Build target
 all: $(OBJ_DIR) $(OBJ_FILES)
 	@echo Creating $(BUILD_DIR)/$(PROJ_NAME)
-	@$(CC) $(CFLAGS) -o $(BUILD_DIR)/$(PROJ_NAME) $(OBJ_FILES)
+	@$(CC) $(CFLAGS) -o $(BUILD_DIR)/$(PROJ_NAME) $(OBJ_FILES) $(LDFLAGS)
 
 # Build directory
 $(BUILD_DIR):
@@ -38,4 +39,4 @@ clean:
 
 # Run target
 run: all
-	./$(BUILD_DIR)/cli-lib-example
+	./$(BUILD_DIR)/$(PROJ_NAME)
