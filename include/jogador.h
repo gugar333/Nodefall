@@ -10,7 +10,7 @@ typedef struct Jogador {
 } Jogador;
 
 void iniciarJogador(Jogador *p, float x, float y);
-void atualizarJogador(Jogador *p, float dt);
+void atualizarJogador(Jogador *p, float dt, int portaTravada);
 void desenharJogador(const Jogador *p);
 
 #endif

@@ -9,6 +9,7 @@ typedef enum {
     ESTADO_ARSENAL,
     ESTADO_ONDAS,
     ESTADO_BOSS,
+    ESTADO_TESOURO,
     ESTADO_VITORIA,
     ESTADO_DERROTA,
     ESTADO_TOTAL
@@ -19,6 +20,7 @@ typedef struct Jogo {
     Jogador jogador;
     Inimigo *inimigos;
     int onda;
+    int portaTravada;
 } Jogo;
 
 void iniciarJogo(Jogo *j);

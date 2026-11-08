@@ -11,7 +11,7 @@ void iniciarJogador(Jogador *p, float x, float y) {
     p->ataque = 1;
 }
 
-void atualizarJogador(Jogador *p, float dt) {
+void atualizarJogador(Jogador *p, float dt, int portaTravada) {
     float dx = 0, dy = 0;
     if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) dx += 1;
     if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT))  dx -= 1;
@@ -19,10 +19,10 @@ void atualizarJogador(Jogador *p, float dt) {
     if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP))    dy -= 1;
 
     float novoX = p->x + dx * p->veloc * dt;
-    if (!colide(novoX, p->y, 1)) p->x = novoX;
+    if (!colide(novoX, p->y, portaTravada)) p->x = novoX;
 
     float novoY = p->y + dy * p->veloc * dt;
-    if (!colide(p->x, novoY, 1)) p->y = novoY;
+    if (!colide(p->x, novoY, portaTravada)) p->y = novoY;
 }
 
 void desenharJogador(const Jogador *p) {
