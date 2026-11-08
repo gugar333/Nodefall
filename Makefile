@@ -1,7 +1,7 @@
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Werror -g -I$(INCLUDE_DIR) -IC:/raylib/raylib/src
-LDFLAGS = -LC:/raylib/raylib/src -lraylib -lgdi32 -lwinmm
+CFLAGS = -Wall -Werror -g -I$(INCLUDE_DIR)
+LDFLAGS = -Llib -lraylib -lgdi32 -lwinmm
 
 #project name
 PROJ_NAME = nodefall
