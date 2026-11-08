@@ -7,9 +7,13 @@ static const char *nomesEstados[ESTADO_TOTAL] = {
     "MENU", "ARSENAL", "ONDAS", "BOSS", "VITORIA", "DERROTA"
 };
 
+static int emSala(Estado e) {
+    return e == ESTADO_ARSENAL || e == ESTADO_ONDAS || e == ESTADO_BOSS;
+}
+
 void iniciarJogo(Jogo *j) {
     j->estado = ESTADO_ARSENAL;
-    j->jogador = (Jogador){0};
+    iniciarJogador(&j->jogador, COLUNAS * TAM / 2.0f, 9 * TAM + TAM / 2.0f);
     j->inimigos = NULL;
     j->onda = 0;
 }
@@ -18,11 +22,16 @@ void atualizarJogo(Jogo *j) {
     if (IsKeyPressed(KEY_N)) {
         j->estado = (j->estado + 1) % ESTADO_TOTAL;
     }
+
+    if (emSala(j->estado)) {
+        atualizarJogador(&j->jogador, GetFrameTime());
+    }
 }
 
 void desenharJogo(const Jogo *j) {
-    if (j->estado == ESTADO_ARSENAL || j->estado == ESTADO_ONDAS || j->estado == ESTADO_BOSS) {
+    if (emSala(j->estado)) {
         desenharSala();
+        desenharJogador(&j->jogador);
     }
     DrawText(nomesEstados[j->estado], 10, 10, 20, WHITE);
 }

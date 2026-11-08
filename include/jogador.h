@@ -9,4 +9,8 @@ typedef struct Jogador {
     float ataque;
 } Jogador;
 
+void iniciarJogador(Jogador *p, float x, float y);
+void atualizarJogador(Jogador *p, float dt);
+void desenharJogador(const Jogador *p);
+
 #endif
