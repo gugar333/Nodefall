@@ -1,15 +1,32 @@
 #include <stdlib.h>
+#include "raylib.h"
 #include "inimigo.h"
 
-void inserirInimigo(Inimigo **lista, float x, float y){
+typedef struct {
+    float veloc;
+    float vida;
+    float dano;
+    float raio;
+} DadosInimigo;
+
+static DadosInimigo tabela[INIMIGO_TIPOS] = {
+    {100.0f, 3.0f, 1.0f, 14.0f},
+    {220.0f, 1.0f, 1.0f, 10.0f}, 
+    {50.0f, 12.0f, 3.0f, 22.0f}
+};
+
+void inserirInimigo(Inimigo **lista, TipoInimigo tipo, float x, float y){
     Inimigo *novo = (Inimigo *) malloc(sizeof(Inimigo));
     if (novo == NULL){
         return;
     }
     novo->x = x;
     novo->y = y;
-    novo->veloc = 60 + rand() % 40;
-    novo->vida = 2;
+    novo->tipo = tipo;
+    novo->veloc = tabela[tipo].veloc;
+    novo->vida = tabela[tipo].vida;
+    novo->dano = tabela[tipo].dano;
+    novo->raio = tabela[tipo].raio;
     novo->prox = *lista;
     *lista = novo;
 }
@@ -39,4 +56,13 @@ int contarInimigos(Inimigo *lista) {
     int n = 0;
     for (Inimigo *p = lista; p != NULL; p = p->prox) n++;
     return n;
+}
+
+void desenharInimigos(Inimigo *lista){
+    for (Inimigo *i = lista; i != NULL; i = i->prox){
+        Color cor = RED;
+        if (i->tipo == INIMIGO_CORREDOR) cor = ORANGE;
+        if(i->tipo == INIMIGO_BRUTAMONTES) cor = PURPLE;
+        DrawCircle((int)i->x, (int)i->y, i->raio, cor);
+    }
 }

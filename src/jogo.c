@@ -68,6 +68,9 @@ static void desenharArsenal(const Jogo *j) {
 void iniciarJogo(Jogo *j) {
     iniciarJogador(&j->jogador, INICIO_X, INICIO_Y);
     j->inimigos = NULL;
+    inserirInimigo(&j->inimigos, INIMIGO_SERVO,       200, 200);
+    inserirInimigo(&j->inimigos, INIMIGO_CORREDOR,    400, 200);
+    inserirInimigo(&j->inimigos, INIMIGO_BRUTAMONTES, 600, 200);
     j->onda = 0;
     j->portaTravada = 0;
     entrarNoEstado(j, ESTADO_ARSENAL);
@@ -104,6 +107,7 @@ void desenharJogo(const Jogo *j) {
             desenharArsenal(j);
         }
         desenharJogador(&j->jogador);
+        desenharInimigos(j->inimigos);
     }
     DrawText(nomesEstados[j->estado], 10, 10, 20, WHITE);
 }
