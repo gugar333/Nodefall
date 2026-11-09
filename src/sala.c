@@ -8,7 +8,7 @@ static char salas[NUM_SALAS][LINHAS][COLUNAS + 1] = {
         "#..................#",
         "#..................#",
         "#..................#",
-        "#..................#",
+        "#....A........A....#",
         "#..................#",
         "#..................#",
         "#..................#",
@@ -75,7 +75,7 @@ int bloqueado(float px, float py, int porta_travada){
 
     if (l >= LINHAS || c >= COLUNAS) return 1;
     char t = salas[atual][l][c];
-    return t == '#' || (t == 'P' && porta_travada);
+    return t == '#' || t == 'A' || (t == 'P' && porta_travada);
 }
 
 int colide (float x, float y, int porta_travada){
@@ -109,7 +109,9 @@ void desenharSala(void) {
             if (salas[atual][l][c] == '#') cor = DARKGRAY;
             else if (salas[atual][l][c] == 'P') cor = BROWN;
             else if (salas[atual][l][c] == 'T') cor = GOLD;
+            else if (salas[atual][l][c] == 'A') cor = GRAY;
             else cor = BEIGE;
+            
 
             DrawRectangle(c * TAM, l * TAM, TAM, TAM, cor);
         }

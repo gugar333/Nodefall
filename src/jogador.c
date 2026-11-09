@@ -9,6 +9,7 @@ void iniciarJogador(Jogador *p, float x, float y) {
     p->vida = 5;
     p->invulnerab = 0;
     p->ataque = 1;
+    p->arma = ARMA_NENHUMA;
 }
 
 void atualizarJogador(Jogador *p, float dt, int portaTravada) {
@@ -27,4 +28,10 @@ void atualizarJogador(Jogador *p, float dt, int portaTravada) {
 
 void desenharJogador(const Jogador *p) {
     DrawRectangle(p->x - 14, p->y - 14, 28, 28, BLUE);
+    desenharArma(p->arma, p->x + 8, p->y - 16, 0.7f);
+}
+
+Rectangle retanguloJogador(const Jogador *p) {
+    Rectangle r = { p->x - 14, p->y - 14, 28, 28 };
+    return r;
 }
