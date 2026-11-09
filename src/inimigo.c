@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include "raylib.h"
 #include "inimigo.h"
+#include <math.h>
+#include "sala.h"
 
 typedef struct {
     float veloc;
@@ -64,5 +66,19 @@ void desenharInimigos(Inimigo *lista){
         if (i->tipo == INIMIGO_CORREDOR) cor = ORANGE;
         if(i->tipo == INIMIGO_BRUTAMONTES) cor = PURPLE;
         DrawCircle((int)i->x, (int)i->y, i->raio, cor);
+    }
+}
+
+void atualizarInimigos(Inimigo *lista, float jogadorX, float jogadorY, float dt){
+    for (Inimigo *i = lista; i!= NULL; i = i->prox){
+        float dx = jogadorX - i->x;
+        float dy = jogadorY - i->y;
+        float dist = sqrtf(dx * dx + dy * dy);
+        if (dist < 1.0f) continue;
+        float passoX = (dx/dist) * i->veloc * dt;
+        float passoY = (dy/dist) * i->veloc * dt;
+
+        if (!colide(i->x + passoX, i->y, 0)) i->x += passoX;
+        if (!colide(i->x, i->y +passoY, 0)) i->y += passoY;
     }
 }

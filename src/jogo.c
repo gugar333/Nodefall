@@ -68,9 +68,9 @@ static void desenharArsenal(const Jogo *j) {
 void iniciarJogo(Jogo *j) {
     iniciarJogador(&j->jogador, INICIO_X, INICIO_Y);
     j->inimigos = NULL;
-    inserirInimigo(&j->inimigos, INIMIGO_SERVO,       200, 200);
-    inserirInimigo(&j->inimigos, INIMIGO_CORREDOR,    400, 200);
-    inserirInimigo(&j->inimigos, INIMIGO_BRUTAMONTES, 600, 200);
+    inserirInimigo(&j->inimigos, INIMIGO_SERVO,       100, 100);
+    inserirInimigo(&j->inimigos, INIMIGO_CORREDOR,    400, 100);
+    inserirInimigo(&j->inimigos, INIMIGO_BRUTAMONTES, 700, 100);
     j->onda = 0;
     j->portaTravada = 0;
     entrarNoEstado(j, ESTADO_ARSENAL);
@@ -83,6 +83,7 @@ void atualizarJogo(Jogo *j) {
 
     if (emSala(j->estado)) {
         atualizarJogador(&j->jogador, GetFrameTime(), j->portaTravada);
+        atualizarInimigos(j->inimigos, j->jogador.x, j->jogador.y, GetFrameTime());
 
         if (j->estado == ESTADO_ARSENAL) {
             atualizarArsenal(j);

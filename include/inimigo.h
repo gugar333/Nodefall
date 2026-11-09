@@ -23,6 +23,7 @@ void removerMortos(Inimigo **lista);
 void liberar(Inimigo **lista);
 int contarInimigos(Inimigo *lista);
 void desenharInimigos(Inimigo *lista);
+void atualizarInimigos(Inimigo *lista, float jogadorX, float jogadorY, float dt);
 
 
 #endif 
