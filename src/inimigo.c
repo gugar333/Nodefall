@@ -13,8 +13,8 @@ typedef struct {
 
 static DadosInimigo tabela[INIMIGO_TIPOS] = {
     {100.0f, 3.0f, 1.0f, 14.0f},
-    {220.0f, 1.0f, 1.0f, 10.0f}, 
-    {50.0f, 12.0f, 3.0f, 22.0f}
+    {140.0f, 1.0f, 1.0f, 10.0f}, 
+    {70.0f, 12.0f, 3.0f, 22.0f}
 };
 
 void inserirInimigo(Inimigo **lista, TipoInimigo tipo, float x, float y){
@@ -78,7 +78,7 @@ void atualizarInimigos(Inimigo *lista, float jogadorX, float jogadorY, float dt)
         float passoX = (dx/dist) * i->veloc * dt;
         float passoY = (dy/dist) * i->veloc * dt;
 
-        if (!colide(i->x + passoX, i->y, 0)) i->x += passoX;
-        if (!colide(i->x, i->y +passoY, 0)) i->y += passoY;
+        if (!colideRaio(i->x + passoX, i->y, i->raio, 1)) i->x += passoX;
+        if (!colideRaio(i->x, i->y + passoY, i->raio, 1)) i->y += passoY;
     }
 }

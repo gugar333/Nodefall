@@ -24,6 +24,12 @@ static void entrarNoEstado(Jogo *j, Estado e) {
     else if (e == ESTADO_ONDAS) mudarSala(1);
     else if (e == ESTADO_BOSS) mudarSala(2);
     else if (e == ESTADO_TESOURO) mudarSala(3);
+    liberar(&j->inimigos);
+    if (e == ESTADO_ONDAS) {
+        inserirInimigo(&j->inimigos, INIMIGO_SERVO,       100, 100);
+        inserirInimigo(&j->inimigos, INIMIGO_CORREDOR,    400, 100);
+        inserirInimigo(&j->inimigos, INIMIGO_BRUTAMONTES, 700, 100);
+    }
 
     if (emSala(e)) {
         j->jogador.x = INICIO_X;
@@ -68,9 +74,6 @@ static void desenharArsenal(const Jogo *j) {
 void iniciarJogo(Jogo *j) {
     iniciarJogador(&j->jogador, INICIO_X, INICIO_Y);
     j->inimigos = NULL;
-    inserirInimigo(&j->inimigos, INIMIGO_SERVO,       100, 100);
-    inserirInimigo(&j->inimigos, INIMIGO_CORREDOR,    400, 100);
-    inserirInimigo(&j->inimigos, INIMIGO_BRUTAMONTES, 700, 100);
     j->onda = 0;
     j->portaTravada = 0;
     entrarNoEstado(j, ESTADO_ARSENAL);
@@ -107,8 +110,8 @@ void desenharJogo(const Jogo *j) {
         if (j->estado == ESTADO_ARSENAL) {
             desenharArsenal(j);
         }
-        desenharJogador(&j->jogador);
         desenharInimigos(j->inimigos);
+        desenharJogador(&j->jogador);
     }
     DrawText(nomesEstados[j->estado], 10, 10, 20, WHITE);
 }

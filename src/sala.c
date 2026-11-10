@@ -78,12 +78,15 @@ int bloqueado(float px, float py, int porta_travada){
     return t == '#' || t == 'A' || (t == 'P' && porta_travada);
 }
 
-int colide (float x, float y, int porta_travada){
-    float m = 14;
+int colideRaio(float x, float y, float m, int porta_travada){
     return bloqueado(x-m, y-m, porta_travada) ||
             bloqueado(x+m, y-m, porta_travada) ||
             bloqueado(x-m, y+m, porta_travada) ||
             bloqueado(x+m, y+m, porta_travada);
+}
+
+int colide (float x, float y, int porta_travada){
+    return colideRaio(x, y, 14, porta_travada);
 }
 
 int naPorta(float x, float y) {
