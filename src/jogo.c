@@ -71,6 +71,23 @@ static void desenharArsenal(const Jogo *j) {
     DrawText(dica, (COLUNAS * TAM - largura) / 2, 10 * TAM + 10, 18, DARKGRAY);
 }
 
+static void verificarDano(Jogo *j) {
+    if (j->jogador.invulnerab > 0) return;
+
+    Rectangle r = retanguloJogador(&j->jogador);
+    for (Inimigo *i = j->inimigos; i != NULL; i = i->prox) {
+        if (CheckCollisionRecs(r, retanguloInimigo(i))) {
+            j->jogador.vida -= i->dano;
+            j->jogador.invulnerab = 1.0f;
+            break;
+        }
+    }
+
+    if (j->jogador.vida <= 0) {
+        entrarNoEstado(j, ESTADO_DERROTA);
+    }
+}
+
 void iniciarJogo(Jogo *j) {
     iniciarJogador(&j->jogador, INICIO_X, INICIO_Y);
     j->inimigos = NULL;
@@ -84,9 +101,15 @@ void atualizarJogo(Jogo *j) {
         entrarNoEstado(j, (j->estado + 1) % ESTADO_TOTAL);
     }
 
+    if (j->estado == ESTADO_DERROTA && IsKeyPressed(KEY_ENTER)) {
+    liberar(&j->inimigos);
+    iniciarJogo(j);
+    }
+
     if (emSala(j->estado)) {
         atualizarJogador(&j->jogador, GetFrameTime(), j->portaTravada);
         atualizarInimigos(j->inimigos, j->jogador.x, j->jogador.y, GetFrameTime());
+        verificarDano(j);
 
         if (j->estado == ESTADO_ARSENAL) {
             atualizarArsenal(j);
@@ -113,7 +136,14 @@ void desenharJogo(const Jogo *j) {
         desenharInimigos(j->inimigos);
         desenharJogador(&j->jogador);
     }
+        if (j->estado == ESTADO_DERROTA) {
+        const char *msg = "Voce perdeu! Aperte ENTER para tentar de novo";
+        int largura = MeasureText(msg, 24);
+        DrawText(msg, (COLUNAS * TAM - largura) / 2, LINHAS * TAM / 2, 24, RED);
+    }
+
     DrawText(nomesEstados[j->estado], 10, 10, 20, WHITE);
+    DrawText(TextFormat("Vida: %d", (int)j->jogador.vida), COLUNAS * TAM - 100, 10, 20, WHITE);
 }
 
 void encerrarJogo(Jogo *j) {

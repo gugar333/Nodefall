@@ -1,5 +1,6 @@
 #ifndef INIMIGO_H
 #define INIMIGO_H
+#include "raylib.h"
 
 typedef enum {
     INIMIGO_SERVO,
@@ -24,6 +25,6 @@ void liberar(Inimigo **lista);
 int contarInimigos(Inimigo *lista);
 void desenharInimigos(Inimigo *lista);
 void atualizarInimigos(Inimigo *lista, float jogadorX, float jogadorY, float dt);
-
+Rectangle retanguloInimigo(const Inimigo *i);
 
 #endif 

@@ -13,7 +13,7 @@ typedef struct {
 
 static DadosInimigo tabela[INIMIGO_TIPOS] = {
     {100.0f, 3.0f, 1.0f, 14.0f},
-    {140.0f, 1.0f, 1.0f, 10.0f}, 
+    {130.0f, 1.0f, 1.0f, 10.0f}, 
     {70.0f, 12.0f, 3.0f, 22.0f}
 };
 
@@ -81,4 +81,9 @@ void atualizarInimigos(Inimigo *lista, float jogadorX, float jogadorY, float dt)
         if (!colideRaio(i->x + passoX, i->y, i->raio, 1)) i->x += passoX;
         if (!colideRaio(i->x, i->y + passoY, i->raio, 1)) i->y += passoY;
     }
+}
+
+Rectangle retanguloInimigo(const Inimigo *i) {
+    Rectangle r = { i->x - i->raio, i->y - i->raio, i->raio * 2, i->raio * 2 };
+    return r;
 }

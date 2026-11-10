@@ -13,6 +13,7 @@ void iniciarJogador(Jogador *p, float x, float y) {
 }
 
 void atualizarJogador(Jogador *p, float dt, int portaTravada) {
+    if (p->invulnerab > 0) p->invulnerab -= dt;
     float dx = 0, dy = 0;
     if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) dx += 1;
     if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT))  dx -= 1;
@@ -27,6 +28,7 @@ void atualizarJogador(Jogador *p, float dt, int portaTravada) {
 }
 
 void desenharJogador(const Jogador *p) {
+    if (p->invulnerab > 0 && (int)(p->invulnerab * 10) % 2 == 0) return;
     DrawRectangle(p->x - 14, p->y - 14, 28, 28, BLUE);
     desenharArma(p->arma, p->x + 8, p->y - 16, 0.7f);
 }
