@@ -49,8 +49,13 @@ static void atualizarArsenal(Jogo *j) {
     if (!IsKeyPressed(KEY_E)) return;
 
     Rectangle r = retanguloJogador(&j->jogador);
-    if (CheckCollisionRecs(r, alcance(pedestalEspada))) j->jogador.arma = ARMA_ESPADA;
-    else if (CheckCollisionRecs(r, alcance(pedestalArco))) j->jogador.arma = ARMA_ARCO;
+        if (CheckCollisionRecs(r, alcance(pedestalEspada))) {
+        j->jogador.arma = ARMA_ESPADA;
+        j->jogador.ataque = 2;
+    } else if (CheckCollisionRecs(r, alcance(pedestalArco))) {
+        j->jogador.arma = ARMA_ARCO;
+        j->jogador.ataque = 1;
+    }
 
     if (j->jogador.arma != ARMA_NENHUMA) {
         j->portaTravada = 0;
@@ -88,6 +93,23 @@ static void verificarDano(Jogo *j) {
     }
 }
 
+static void atacarComEspada(Jogo *j) {
+    if (j->jogador.arma != ARMA_ESPADA) return;
+    if (!IsKeyPressed(KEY_SPACE) || j->jogador.recarga > 0) return;
+
+    j->jogador.recarga = 0.4f;
+    j->jogador.tempoGolpe = 0.15f;
+
+    Rectangle golpe = areaGolpe(&j->jogador);
+    for (Inimigo *i = j->inimigos; i != NULL; i = i->prox) {
+        if (CheckCollisionRecs(golpe, retanguloInimigo(i))) {
+            i->vida -= j->jogador.ataque;
+        }
+    }
+
+    removerMortos(&j->inimigos);
+}
+
 void iniciarJogo(Jogo *j) {
     iniciarJogador(&j->jogador, INICIO_X, INICIO_Y);
     j->inimigos = NULL;
@@ -109,6 +131,7 @@ void atualizarJogo(Jogo *j) {
     if (emSala(j->estado)) {
         atualizarJogador(&j->jogador, GetFrameTime(), j->portaTravada);
         atualizarInimigos(j->inimigos, j->jogador.x, j->jogador.y, GetFrameTime());
+        atacarComEspada(j);
         verificarDano(j);
 
         if (j->estado == ESTADO_ARSENAL) {

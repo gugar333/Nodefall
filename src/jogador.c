@@ -10,15 +10,27 @@ void iniciarJogador(Jogador *p, float x, float y) {
     p->invulnerab = 0;
     p->ataque = 1;
     p->arma = ARMA_NENHUMA;
+    p->dirX = 0;
+    p->dirY = -1;
+    p->recarga = 0;
+    p->tempoGolpe = 0;
 }
 
 void atualizarJogador(Jogador *p, float dt, int portaTravada) {
     if (p->invulnerab > 0) p->invulnerab -= dt;
+    if (p->recarga > 0) p->recarga -= dt;
+    if (p->tempoGolpe > 0) p->tempoGolpe -= dt;
+
     float dx = 0, dy = 0;
     if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) dx += 1;
     if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT))  dx -= 1;
     if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN))  dy += 1;
     if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP))    dy -= 1;
+
+    if (dx != 0 || dy != 0) {
+        p->dirX = dx;
+        p->dirY = dy;
+    }
 
     float novoX = p->x + dx * p->veloc * dt;
     if (!colide(novoX, p->y, portaTravada)) p->x = novoX;
@@ -29,11 +41,23 @@ void atualizarJogador(Jogador *p, float dt, int portaTravada) {
 
 void desenharJogador(const Jogador *p) {
     if (p->invulnerab > 0 && (int)(p->invulnerab * 10) % 2 == 0) return;
+
     DrawRectangle(p->x - 14, p->y - 14, 28, 28, BLUE);
     desenharArma(p->arma, p->x + 8, p->y - 16, 0.7f);
+
+    if (p->tempoGolpe > 0) {
+        DrawRectangleRec(areaGolpe(p), Fade(WHITE, 0.5f));
+    }
 }
 
 Rectangle retanguloJogador(const Jogador *p) {
     Rectangle r = { p->x - 14, p->y - 14, 28, 28 };
+    return r;
+}
+
+Rectangle areaGolpe(const Jogador *p) {
+    float cx = p->x + p->dirX * 34;
+    float cy = p->y + p->dirY * 34;
+    Rectangle r = { cx - 20, cy - 20, 40, 40 };
     return r;
 }
