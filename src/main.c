@@ -1,10 +1,12 @@
 #include "raylib.h"
 #include "sala.h"
 #include "jogo.h"
+#include "recursos.h"
 
 int main(void) {
     InitWindow(COLUNAS * TAM, LINHAS * TAM, "Nodefall");
     SetTargetFPS(60);
+    carregarRecursos();
 
     Jogo jogo;
     iniciarJogo(&jogo);
@@ -19,7 +21,7 @@ int main(void) {
     }
 
     encerrarJogo(&jogo);
+    descarregarRecursos();
     CloseWindow();
     return 0;
 }
-

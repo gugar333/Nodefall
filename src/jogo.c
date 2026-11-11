@@ -10,8 +10,8 @@ static const char *nomesEstados[ESTADO_TOTAL] = {
     "MENU", "ARSENAL", "ONDAS", "BOSS", "TESOURO", "VITORIA", "DERROTA"
 };
 
-static const Rectangle pedestalEspada = { 5 * TAM, 5 * TAM, TAM, TAM };
-static const Rectangle pedestalArco = { 14 * TAM, 5 * TAM, TAM, TAM };
+static const Rectangle pedestalEspada = { 4 * TAM, 5 * TAM, TAM, 2 * TAM };
+static const Rectangle pedestalArco = { 15 * TAM, 5 * TAM, TAM, 2 * TAM };
 
 static int emSala(Estado e) {
     return e == ESTADO_ARSENAL || e == ESTADO_ONDAS || e == ESTADO_BOSS || e == ESTADO_TESOURO;
@@ -26,9 +26,9 @@ static void entrarNoEstado(Jogo *j, Estado e) {
     else if (e == ESTADO_TESOURO) mudarSala(3);
     liberar(&j->inimigos);
     if (e == ESTADO_ONDAS) {
-        inserirInimigo(&j->inimigos, INIMIGO_SERVO,       100, 100);
-        inserirInimigo(&j->inimigos, INIMIGO_CORREDOR,    400, 100);
-        inserirInimigo(&j->inimigos, INIMIGO_BRUTAMONTES, 700, 100);
+        inserirInimigo(&j->inimigos, INIMIGO_SERVO,       2 * TAM + TAM / 2, 2 * TAM + TAM / 2);
+        inserirInimigo(&j->inimigos, INIMIGO_CORREDOR,    17 * TAM + TAM / 2, 2 * TAM + TAM / 2);
+        inserirInimigo(&j->inimigos, INIMIGO_BRUTAMONTES, 2 * TAM + TAM / 2, 9 * TAM + TAM / 2);
     }
 
     if (emSala(e)) {
@@ -36,7 +36,7 @@ static void entrarNoEstado(Jogo *j, Estado e) {
         j->jogador.y = INICIO_Y;
     }
 
-    j->portaTravada = (e == ESTADO_ARSENAL && j->jogador.arma == ARMA_NENHUMA);
+    j->portaTravada = (e == ESTADO_ARSENAL && j->jogador.arma == ARMA_NENHUMA) || e == ESTADO_ONDAS;
 }
 
 static Rectangle alcance(Rectangle pedestal) {
@@ -65,15 +65,13 @@ static void atualizarArsenal(Jogo *j) {
 static void desenharArsenal(const Jogo *j) {
     if (j->jogador.arma != ARMA_NENHUMA) return;
 
-    desenharArma(ARMA_ESPADA, pedestalEspada.x, pedestalEspada.y - 30, 1.0f);
-    DrawText("ESPADA", pedestalEspada.x - 10, pedestalEspada.y - 50, 16, BLACK);
+    desenharArma(ARMA_ESPADA, pedestalEspada.x, pedestalEspada.y - 45, 1.0f);
+    DrawText("ESPADA", pedestalEspada.x - 10, pedestalEspada.y - 65, 16, WHITE);
 
-    desenharArma(ARMA_ARCO, pedestalArco.x, pedestalArco.y - 30, 1.0f);
-    DrawText("ARCO", pedestalArco.x, pedestalArco.y - 50, 16, BLACK);
+    desenharArma(ARMA_ARCO, pedestalArco.x, pedestalArco.y - 45, 1.0f);
+    DrawText("ARCO", pedestalArco.x, pedestalArco.y - 65, 16, WHITE);
 
-    const char *dica = "Fique ao lado de um pedestal e aperte E para pegar a arma";
-    int largura = MeasureText(dica, 18);
-    DrawText(dica, (COLUNAS * TAM - largura) / 2, 10 * TAM + 10, 18, DARKGRAY);
+    DrawText("E: pegar a arma (ao lado da coluna)", 10, LINHAS * TAM - 28, 16, WHITE);
 }
 
 static void verificarDano(Jogo *j) {
@@ -133,6 +131,9 @@ void atualizarJogo(Jogo *j) {
         atualizarInimigos(j->inimigos, j->jogador.x, j->jogador.y, GetFrameTime());
         atacarComEspada(j);
         verificarDano(j);
+        if (j->estado == ESTADO_ONDAS && contarInimigos(j->inimigos) == 0) {
+            j->portaTravada = 0;
+        }
 
         if (j->estado == ESTADO_ARSENAL) {
             atualizarArsenal(j);
@@ -152,7 +153,7 @@ void atualizarJogo(Jogo *j) {
 
 void desenharJogo(const Jogo *j) {
     if (emSala(j->estado)) {
-        desenharSala();
+        desenharSala(j->portaTravada);
         if (j->estado == ESTADO_ARSENAL) {
             desenharArsenal(j);
         }

@@ -12,6 +12,6 @@ int colideRaio(float x, float y, float m, int porta_travada);
 int colide(float x, float y, int porta_travada);
 int naPorta(float x, float y);
 int noTesouro(float x, float y);
-void desenharSala(void);
+void desenharSala(int portaTravada);
 
 #endif
