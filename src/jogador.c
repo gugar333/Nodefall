@@ -50,7 +50,7 @@ void desenharJogador(const Jogador *p) {
     if (p->invulnerab > 0 && (int)(p->invulnerab * 10) % 2 == 0) return;
 
     Sprite base = p->andando ? SPR_CAVALEIRO_CORRENDO : SPR_CAVALEIRO_PARADO;
-    desenharSpriteNoChao(base + quadroAnimacao(), p->x, p->y + 14, 2.5f, p->olhandoEsquerda);
+    desenharSpriteNoChao(base + quadroAnimacao(QUADROS), p->x, p->y + 14, 2.5f, p->olhandoEsquerda);
 
     float armaX = p->olhandoEsquerda ? p->x - 36 : p->x + 8;
     desenharArma(p->arma, armaX, p->y - 16, 0.7f, p->olhandoEsquerda);

@@ -5,7 +5,7 @@
 static char salas[NUM_SALAS][LINHAS][COLUNAS + 1] = {
     {
         "#########PP#########",
-        "#.......#PP#.......#",
+        "#..F....BPPB....F..#",
         "#..................#",
         "#..................#",
         "#..................#",
@@ -19,44 +19,44 @@ static char salas[NUM_SALAS][LINHAS][COLUNAS + 1] = {
     },
     {
         "#########PP#########",
-        "#.......#PP#.......#",
+        "#.......BPPB.......#",
         "#.S..............S.#",
         "#..................#",
-        "#..................#",
+        "#C.................#",
         "#....##......##....#",
         "#....##......##....#",
-        "#..................#",
+        "#.................C#",
         "#..................#",
         "#.S..............S.#",
-        "#.......#EE#.......#",
+        "#.....C.#EE#.......#",
         "#########EE#########"
     },
     {
         "#########PP#########",
-        "#.......#PP#.......#",
+        "#.......BPPB.......#",
+        "#.....C............#",
+        "#...##........##...#",
+        "#...##........##...#",
+        "#C.................#",
         "#..................#",
         "#...##........##...#",
         "#...##........##...#",
-        "#..................#",
-        "#..................#",
-        "#...##........##...#",
-        "#...##........##...#",
-        "#..................#",
+        "#............C.....#",
         "#.......#EE#.......#",
         "#########EE#########"
     },
     {
-        "####################",
-        "#..................#",
-        "#..................#",
-        "#..................#",
-        "#.......####.......#",
-        "#.......#TT#.......#",
-        "#.......#TT#.......#",
-        "#..................#",
-        "#..................#",
-        "#..................#",
-        "#.......#EE#.......#",
+        "######B######B######",
+        "####.F........F.####",
+        "####...$.TT.$...####",
+        "####.....TT.....####",
+        "####............####",
+        "#######>....<#######",
+        "#######......#######",
+        "#######>....<#######",
+        "#######......#######",
+        "#######>....<#######",
+        "#########EE#########",
         "#########EE#########"
     }
 };
@@ -76,7 +76,7 @@ int bloqueado(float px, float py, int porta_travada){
 
     if (l >= LINHAS || c >= COLUNAS) return 1;
     char t = salas[atual][l][c];
-    return t == '#' || t == 'A' || t == 'E' || (t == 'P' && porta_travada);
+    return t == '#' || t == 'A' || t == 'E' || t == 'B' || t == 'F' || t == '>' || t == '<' || (t == 'P' && porta_travada);
 }
 
 int colideRaio(float x, float y, float m, int porta_travada){
@@ -127,7 +127,7 @@ void desenharSala(int portaTravada) {
             float x = c * TAM;
             float y = l * TAM;
 
-            if (t == '#' || t == 'P' || t == 'E') desenharSprite(SPR_PAREDE, x, y, TAM, TAM);
+            if (t == '#' || t == 'P' || t == 'E' || t == 'B' || t == 'F' || t == '>' || t == '<') desenharSprite(SPR_PAREDE, x, y, TAM, TAM);
             else desenharSprite(pisoDaPosicao(l, c), x, y, TAM, TAM);
         }
     }
@@ -150,12 +150,30 @@ void desenharSala(int portaTravada) {
             } else if (t == 'T' && cantoDoBloco(l, c)) {
                 desenharSprite(SPR_BAU, x, y, 2 * TAM, 2 * TAM);
             } else if (t == 'S') {
-              float angulo;
-              if (l < LINHAS / 2) angulo = (c < COLUNAS / 2) ? 270 : 0;
-              else angulo = (c < COLUNAS / 2) ? 180 : 90;
-              desenharSpriteGirado(SPR_ESCADA, x, y, TAM, angulo);
+                float angulo;
+                if (l < LINHAS / 2) angulo = (c < COLUNAS / 2) ? 270 : 0;
+                else angulo = (c < COLUNAS / 2) ? 180 : 90;
+                desenharSpriteGirado(SPR_ESCADA, x, y, TAM, angulo);
             } else if (t == 'A' && cantoDoBloco(l, c)) {
                 desenharSprite(SPR_COLUNA, x, y - 18, TAM, 3 * TAM);
+            } else if (t == 'B') {
+                desenharSprite(SPR_BANDEIRA_VERMELHA + atual, x, y, TAM, TAM);
+            } else if (t == 'F') {
+                int q = quadroAnimacao(QUADROS_FONTE);
+                desenharSprite(SPR_FONTE_MEIO + q, x, y - TAM, TAM, TAM);
+                desenharSprite(SPR_FONTE_BACIA + q, x, y, TAM, TAM);
+            } else if (t == '>') {
+                int q = quadroAnimacao(QUADROS_FONTE);
+                desenharSpriteGirado(SPR_FONTE_MEIO + q, x - TAM, y, TAM, 270);
+                desenharSpriteGirado(SPR_FONTE_BACIA + q, x, y, TAM, 270);
+            } else if (t == '<') {
+                int q = quadroAnimacao(QUADROS_FONTE);
+                desenharSpriteGirado(SPR_FONTE_MEIO + q, x + TAM, y, TAM, 90);
+                desenharSpriteGirado(SPR_FONTE_BACIA + q, x, y, TAM, 90);
+            } else if (t == 'C') {
+                desenharSprite(SPR_CRANIO, x, y, TAM, TAM);
+            } else if (t == '$') {
+                desenharSpriteNoChao(SPR_MOEDA + quadroAnimacao(QUADROS), x + TAM / 2, y + 30, 3.0f, 0);
             }
         }
     }

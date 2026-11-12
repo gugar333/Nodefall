@@ -32,7 +32,22 @@ static const char *arquivos[SPR_TOTAL] = {
     "assets/ogre_run_anim_f2.png",
     "assets/ogre_run_anim_f3.png",
     "assets/weapon_knight_sword.png",
-    "assets/weapon_bow.png"
+    "assets/weapon_bow.png",
+    "assets/wall_banner_red.png",
+    "assets/wall_banner_blue.png",
+    "assets/wall_banner_green.png",
+    "assets/wall_banner_yellow.png",
+    "assets/wall_fountain_mid_red_anim_f0.png",
+    "assets/wall_fountain_mid_red_anim_f1.png",
+    "assets/wall_fountain_mid_red_anim_f2.png",
+    "assets/wall_fountain_basin_red_anim_f0.png",
+    "assets/wall_fountain_basin_red_anim_f1.png",
+    "assets/wall_fountain_basin_red_anim_f2.png",
+    "assets/skull.png",
+    "assets/coin_anim_f0.png",
+    "assets/coin_anim_f1.png",
+    "assets/coin_anim_f2.png",
+    "assets/coin_anim_f3.png"
 };
 
 static Texture2D texturas[SPR_TOTAL];
@@ -75,6 +90,6 @@ void desenharSpriteNoChao(Sprite s, float centroX, float chaoY, float escala, in
     DrawTexturePro(t, origem, destino, centro, 0, WHITE);
 }
 
-int quadroAnimacao(void) {
-    return (int)(GetTime() * 8) % QUADROS;
+int quadroAnimacao(int total) {
+    return (int)(GetTime() * 8) % total;
 }
