@@ -5,14 +5,14 @@
 
 #define INICIO_X (COLUNAS * TAM / 2.0f)
 #define INICIO_Y (9 * TAM + TAM / 2.0f)
-
+#define NUM_ONDAS 3
 static const char *nomesEstados[ESTADO_TOTAL] = {
     "MENU", "ARSENAL", "ONDAS", "BOSS", "TESOURO", "VITORIA", "DERROTA"
 };
 
 static const Rectangle pedestalEspada = { 4 * TAM, 5 * TAM, TAM, 2 * TAM };
 static const Rectangle pedestalArco = { 15 * TAM, 5 * TAM, TAM, 2 * TAM };
-
+static void iniciarOnda(Jogo *j);
 static int emSala(Estado e) {
     return e == ESTADO_ARSENAL || e == ESTADO_ONDAS || e == ESTADO_BOSS || e == ESTADO_TESOURO;
 }
@@ -27,11 +27,9 @@ static void entrarNoEstado(Jogo *j, Estado e) {
     liberar(&j->inimigos);
     liberarFlechas(&j->flechas);
     if (e == ESTADO_ONDAS) {
-        inserirInimigo(&j->inimigos, INIMIGO_SERVO,       2 * TAM + TAM / 2, 2 * TAM + TAM / 2);
-        inserirInimigo(&j->inimigos, INIMIGO_CORREDOR,    17 * TAM + TAM / 2, 2 * TAM + TAM / 2);
-        inserirInimigo(&j->inimigos, INIMIGO_BRUTAMONTES, 2 * TAM + TAM / 2, 9 * TAM + TAM / 2);
+        j->onda = 0;
+        iniciarOnda(j);
     }
-
     if (emSala(e)) {
         j->jogador.x = INICIO_X;
         j->jogador.y = INICIO_Y;
@@ -113,7 +111,7 @@ static void atacarComArco(Jogo *j) {
     if (j->jogador.arma != ARMA_ARCO) return;
     if (!IsKeyPressed(KEY_SPACE) || j->jogador.recarga > 0) return;
 
-    j->jogador.recarga = 0.5f;   // intervalo entre os tiros
+    j->jogador.recarga = 0.5f;   
     dispararFlecha(&j->flechas, j->jogador.x, j->jogador.y, j->jogador.dirX, j->jogador.dirY);
 }
 
@@ -124,6 +122,31 @@ void iniciarJogo(Jogo *j) {
     j->onda = 0;
     j->portaTravada = 0;
     entrarNoEstado(j, ESTADO_ARSENAL);
+}
+
+static int composicaoOndas [NUM_ONDAS][INIMIGO_TIPOS] = {
+    {3, 1, 0},
+    {5, 3, 0}, 
+    {4, 2, 2}
+};
+
+static float pontosSurgimento [4][2] =  {
+    {2 * TAM + TAM / 2, 2 * TAM + TAM/ 2}, 
+    {17 * TAM + TAM / 2, 2 * TAM + TAM/ 2},
+    {2 * TAM + TAM/ 2, 9 * TAM + TAM / 2}, 
+    {17 * TAM + TAM / 2, 9 * TAM + TAM / 2}
+};
+
+static void iniciarOnda(Jogo *j) {
+    int n = 0;
+    for (int tipo = 0; tipo < INIMIGO_TIPOS; tipo++) {
+        for (int k = 0; k< composicaoOndas[j->onda][tipo]; k++) {
+            float x = pontosSurgimento[n % 4][0] + (n / 4) * 23;
+            float y = pontosSurgimento[n % 4][1];
+            inserirInimigo(&j->inimigos, (TipoInimigo)tipo, x, y);
+            n++;
+        }
+    }j->onda++;
 }
 
 void atualizarJogo(Jogo *j) {
@@ -145,8 +168,9 @@ void atualizarJogo(Jogo *j) {
         removerMortos(&j->inimigos);
         verificarDano(j);
         if (j->estado == ESTADO_ONDAS && contarInimigos(j->inimigos) == 0) {
-            j->portaTravada = 0;
-        }
+            if (j->onda < NUM_ONDAS) iniciarOnda(j);   
+            else j->portaTravada = 0;                  
+        }                  
 
         if (j->estado == ESTADO_ARSENAL) {
             atualizarArsenal(j);
@@ -163,6 +187,9 @@ void atualizarJogo(Jogo *j) {
         }
     }
 }
+
+
+
 
 void desenharJogo(const Jogo *j) {
     if (emSala(j->estado)) {
