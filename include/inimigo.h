@@ -16,6 +16,7 @@ typedef struct Inimigo {
     TipoInimigo tipo;
     float dano;
     float raio;
+    int olhandoEsquerda;
     struct Inimigo *prox;
 } Inimigo;
 

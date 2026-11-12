@@ -11,6 +11,12 @@ typedef enum {
     SPR_COLUNA,
     SPR_BAU,
     SPR_ESCADA,
+    SPR_CAVALEIRO,
+    SPR_ESQUELETO,
+    SPR_DIABINHO,
+    SPR_OGRO,
+    SPR_ESPADA,
+    SPR_ARCO,
     SPR_TOTAL
 } Sprite;
 
@@ -18,5 +24,6 @@ void carregarRecursos(void);
 void descarregarRecursos(void);
 void desenharSprite(Sprite s, float x, float y, float largura, float altura);
 void desenharSpriteGirado(Sprite s, float x, float y, float tamanho, float angulo);
+void desenharSpriteNoChao(Sprite s, float centroX, float chaoY, float escala, int virado);
 
 #endif

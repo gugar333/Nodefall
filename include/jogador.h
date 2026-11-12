@@ -14,6 +14,7 @@ typedef struct Jogador {
     int dirX, dirY;
     float recarga;
     float tempoGolpe;
+    int olhandoEsquerda;
 } Jogador;
 
 void iniciarJogador(Jogador *p, float x, float y);

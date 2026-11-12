@@ -7,6 +7,6 @@ typedef enum {
     ARMA_ARCO
 } Arma;
 
-void desenharArma(Arma arma, float x, float y, float escala);
+void desenharArma(Arma arma, float x, float y, float escala, int virado);
 
 #endif

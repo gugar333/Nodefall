@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "jogador.h"
 #include "sala.h"
+#include "recursos.h"
 
 void iniciarJogador(Jogador *p, float x, float y) {
     p->x = x;
@@ -14,6 +15,7 @@ void iniciarJogador(Jogador *p, float x, float y) {
     p->dirY = -1;
     p->recarga = 0;
     p->tempoGolpe = 0;
+    p->olhandoEsquerda = 0;
 }
 
 void atualizarJogador(Jogador *p, float dt, int portaTravada) {
@@ -32,6 +34,9 @@ void atualizarJogador(Jogador *p, float dt, int portaTravada) {
         p->dirY = dy;
     }
 
+    if (dx < 0) p->olhandoEsquerda = 1;
+    if (dx > 0) p->olhandoEsquerda = 0;
+
     float novoX = p->x + dx * p->veloc * dt;
     if (!colide(novoX, p->y, portaTravada)) p->x = novoX;
 
@@ -42,8 +47,10 @@ void atualizarJogador(Jogador *p, float dt, int portaTravada) {
 void desenharJogador(const Jogador *p) {
     if (p->invulnerab > 0 && (int)(p->invulnerab * 10) % 2 == 0) return;
 
-    DrawRectangle(p->x - 14, p->y - 14, 28, 28, BLUE);
-    desenharArma(p->arma, p->x + 8, p->y - 16, 0.7f);
+    desenharSpriteNoChao(SPR_CAVALEIRO, p->x, p->y + 14, 2.5f, p->olhandoEsquerda);
+
+    float armaX = p->olhandoEsquerda ? p->x - 36 : p->x + 8;
+    desenharArma(p->arma, armaX, p->y - 16, 0.7f, p->olhandoEsquerda);
 
     if (p->tempoGolpe > 0) {
         DrawRectangleRec(areaGolpe(p), Fade(WHITE, 0.5f));

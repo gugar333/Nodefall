@@ -65,10 +65,10 @@ static void atualizarArsenal(Jogo *j) {
 static void desenharArsenal(const Jogo *j) {
     if (j->jogador.arma != ARMA_NENHUMA) return;
 
-    desenharArma(ARMA_ESPADA, pedestalEspada.x, pedestalEspada.y - 45, 1.0f);
+    desenharArma(ARMA_ESPADA, pedestalEspada.x, pedestalEspada.y - 45, 1.0f, 0);
     DrawText("ESPADA", pedestalEspada.x - 10, pedestalEspada.y - 65, 16, WHITE);
 
-    desenharArma(ARMA_ARCO, pedestalArco.x, pedestalArco.y - 45, 1.0f);
+    desenharArma(ARMA_ARCO, pedestalArco.x, pedestalArco.y - 45, 1.0f, 0);
     DrawText("ARCO", pedestalArco.x, pedestalArco.y - 65, 16, WHITE);
 
     DrawText("E: pegar a arma (ao lado da coluna)", 10, LINHAS * TAM - 28, 16, WHITE);

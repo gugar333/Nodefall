@@ -3,18 +3,21 @@
 #include "inimigo.h"
 #include <math.h>
 #include "sala.h"
+#include "recursos.h"
 
 typedef struct {
     float veloc;
     float vida;
     float dano;
     float raio;
+    Sprite sprite;
+    float escala;
 } DadosInimigo;
 
 static DadosInimigo tabela[INIMIGO_TIPOS] = {
-    {100.0f, 3.0f, 1.0f, 14.0f},
-    {130.0f, 1.0f, 1.0f, 10.0f}, 
-    {70.0f, 12.0f, 3.0f, 22.0f}
+    {100.0f, 3.0f, 1.0f, 14.0f, SPR_ESQUELETO, 2.5f},
+    {130.0f, 1.0f, 1.0f, 10.0f, SPR_DIABINHO, 2.0f},
+    {70.0f, 12.0f, 3.0f, 22.0f, SPR_OGRO, 2.0f}
 };
 
 void inserirInimigo(Inimigo **lista, TipoInimigo tipo, float x, float y){
@@ -29,6 +32,7 @@ void inserirInimigo(Inimigo **lista, TipoInimigo tipo, float x, float y){
     novo->vida = tabela[tipo].vida;
     novo->dano = tabela[tipo].dano;
     novo->raio = tabela[tipo].raio;
+    novo->olhandoEsquerda = 0;
     novo->prox = *lista;
     *lista = novo;
 }
@@ -62,10 +66,8 @@ int contarInimigos(Inimigo *lista) {
 
 void desenharInimigos(Inimigo *lista){
     for (Inimigo *i = lista; i != NULL; i = i->prox){
-        Color cor = RED;
-        if (i->tipo == INIMIGO_CORREDOR) cor = ORANGE;
-        if(i->tipo == INIMIGO_BRUTAMONTES) cor = PURPLE;
-        DrawCircle((int)i->x, (int)i->y, i->raio, cor);
+        DadosInimigo d = tabela[i->tipo];
+        desenharSpriteNoChao(d.sprite, i->x, i->y + i->raio, d.escala, i->olhandoEsquerda);
     }
 }
 
@@ -77,6 +79,8 @@ void atualizarInimigos(Inimigo *lista, float jogadorX, float jogadorY, float dt)
         if (dist < 1.0f) continue;
         float passoX = (dx/dist) * i->veloc * dt;
         float passoY = (dy/dist) * i->veloc * dt;
+        if (passoX < 0) i->olhandoEsquerda = 1;
+        if (passoX > 0) i->olhandoEsquerda = 0;
 
         if (!colideRaio(i->x + passoX, i->y, i->raio, 1)) i->x += passoX;
         if (!colideRaio(i->x, i->y + passoY, i->raio, 1)) i->y += passoY;

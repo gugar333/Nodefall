@@ -10,7 +10,13 @@ static const char *arquivos[SPR_TOTAL] = {
     "assets/doors_leaf_open.png",
     "assets/column.png",
     "assets/chest_full_open_anim_f0.png",
-    "assets/floor_stairs.png"
+    "assets/floor_stairs.png",
+    "assets/knight_m_idle_anim_f0.png",
+    "assets/skelet_idle_anim_f0.png",
+    "assets/imp_idle_anim_f0.png",
+    "assets/ogre_idle_anim_f0.png",
+    "assets/weapon_knight_sword.png",
+    "assets/weapon_bow.png"
 };
 
 static Texture2D texturas[SPR_TOTAL];
@@ -41,4 +47,14 @@ void desenharSpriteGirado(Sprite s, float x, float y, float tamanho, float angul
     Rectangle destino = { x + tamanho / 2, y + tamanho / 2, tamanho, tamanho };
     Vector2 centro = { tamanho / 2, tamanho / 2 };
     DrawTexturePro(t, origem, destino, centro, angulo, WHITE);
+}
+
+void desenharSpriteNoChao(Sprite s, float centroX, float chaoY, float escala, int virado) {
+    Texture2D t = texturas[s];
+    float largura = t.width * escala;
+    float altura = t.height * escala;
+    Rectangle origem = { 0, 0, virado ? -t.width : t.width, t.height };
+    Rectangle destino = { centroX - largura / 2, chaoY - altura, largura, altura };
+    Vector2 centro = { 0, 0 };
+    DrawTexturePro(t, origem, destino, centro, 0, WHITE);
 }
