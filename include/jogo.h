@@ -22,6 +22,7 @@ typedef struct Jogo {
     Inimigo *inimigos;
     Flecha *flechas;
     int onda;
+    int abates;
     int portaTravada;
 } Jogo;
 

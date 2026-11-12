@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "jogo.h"
 #include "sala.h"
+#include "telafim.h"
 
 #define INICIO_X (COLUNAS * TAM / 2.0f)
 #define INICIO_Y (9 * TAM + TAM / 2.0f)
@@ -13,8 +14,23 @@
 static const Rectangle pedestalEspada = { 4 * TAM, 5 * TAM, TAM, 2 * TAM };
 static const Rectangle pedestalArco = { 15 * TAM, 5 * TAM, TAM, 2 * TAM };
 static void iniciarOnda(Jogo *j);
+
+
+
 static int emSala(Estado e) {
     return e == ESTADO_ARSENAL || e == ESTADO_ONDAS || e == ESTADO_BOSS || e == ESTADO_TESOURO;
+}
+
+static int calcularPontuacao(const Jogo *j, int venceu) {
+    int pontos = j->abates * 100;
+    if (venceu) pontos += (int)j->jogador.vida * 50;
+    return pontos;
+}
+
+static void limparMortos(Jogo *j) {
+    int antes = contarInimigos(j->inimigos);
+    removerMortos(&j->inimigos);
+    j->abates += antes - contarInimigos(j->inimigos);
 }
 
 static void entrarNoEstado(Jogo *j, Estado e) {
@@ -26,6 +42,9 @@ static void entrarNoEstado(Jogo *j, Estado e) {
     else if (e == ESTADO_TESOURO) mudarSala(3);
     liberar(&j->inimigos);
     liberarFlechas(&j->flechas);
+    if (e == ESTADO_VITORIA || e == ESTADO_DERROTA) {
+        telaFimIniciar(calcularPontuacao(j, e == ESTADO_VITORIA));
+    }
     if (e == ESTADO_ONDAS) {
         j->onda = 0;
         iniciarOnda(j);
@@ -104,7 +123,7 @@ static void atacarComEspada(Jogo *j) {
         }
     }
 
-    removerMortos(&j->inimigos);
+    limparMortos(j);
 }
 
 static void atacarComArco(Jogo *j) {
@@ -119,6 +138,7 @@ void iniciarJogo(Jogo *j) {
     iniciarJogador(&j->jogador, INICIO_X, INICIO_Y);
     j->inimigos = NULL;
     j->flechas = NULL;
+    j->abates = 0;
     j->onda = 0;
     j->portaTravada = 0;
     entrarNoEstado(j, ESTADO_ARSENAL);
@@ -154,9 +174,8 @@ void atualizarJogo(Jogo *j) {
         entrarNoEstado(j, (j->estado + 1) % ESTADO_TOTAL);
     }
 
-    if (j->estado == ESTADO_DERROTA && IsKeyPressed(KEY_ENTER)) {
-    liberar(&j->inimigos);
-    iniciarJogo(j);
+    if (j->estado == ESTADO_VITORIA || j->estado == ESTADO_DERROTA) {
+        if (telaFimAtualizar()) iniciarJogo(j);
     }
 
     if (emSala(j->estado)) {
@@ -165,7 +184,7 @@ void atualizarJogo(Jogo *j) {
         atacarComEspada(j);
         atacarComArco(j);
         atualizarFlechas(&j->flechas, j->inimigos, j->jogador.ataque, GetFrameTime());
-        removerMortos(&j->inimigos);
+        limparMortos(j);
         verificarDano(j);
         if (j->estado == ESTADO_ONDAS && contarInimigos(j->inimigos) == 0) {
             if (j->onda < NUM_ONDAS) iniciarOnda(j);   
@@ -232,14 +251,13 @@ void desenharJogo(const Jogo *j) {
         desenharJogador(&j->jogador);
         desenharHUD(j);
     }
-        if (j->estado == ESTADO_DERROTA) {
-        char *msg = "Voce perdeu! Aperte ENTER para tentar de novo";
-        int largura = MeasureText(msg, 24);
-        DrawText(msg, (COLUNAS * TAM - largura) / 2, LINHAS * TAM / 2, 24, RED);
-    }
+    if (j->estado == ESTADO_DERROTA) telaFimDesenhar(1);
+    else if (j->estado == ESTADO_DERROTA) telaFimDesenhar(0);
+    
 }
 
 void encerrarJogo(Jogo *j) {
     liberar(&j->inimigos);
     liberarFlechas(&j->flechas);
+    telaFimEncerrar();
 }
