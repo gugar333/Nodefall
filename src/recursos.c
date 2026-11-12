@@ -12,9 +12,25 @@ static const char *arquivos[SPR_TOTAL] = {
     "assets/chest_full_open_anim_f0.png",
     "assets/floor_stairs.png",
     "assets/knight_m_idle_anim_f0.png",
-    "assets/skelet_idle_anim_f0.png",
-    "assets/imp_idle_anim_f0.png",
-    "assets/ogre_idle_anim_f0.png",
+    "assets/knight_m_idle_anim_f1.png",
+    "assets/knight_m_idle_anim_f2.png",
+    "assets/knight_m_idle_anim_f3.png",
+    "assets/knight_m_run_anim_f0.png",
+    "assets/knight_m_run_anim_f1.png",
+    "assets/knight_m_run_anim_f2.png",
+    "assets/knight_m_run_anim_f3.png",
+    "assets/skelet_run_anim_f0.png",
+    "assets/skelet_run_anim_f1.png",
+    "assets/skelet_run_anim_f2.png",
+    "assets/skelet_run_anim_f3.png",
+    "assets/imp_run_anim_f0.png",
+    "assets/imp_run_anim_f1.png",
+    "assets/imp_run_anim_f2.png",
+    "assets/imp_run_anim_f3.png",
+    "assets/ogre_run_anim_f0.png",
+    "assets/ogre_run_anim_f1.png",
+    "assets/ogre_run_anim_f2.png",
+    "assets/ogre_run_anim_f3.png",
     "assets/weapon_knight_sword.png",
     "assets/weapon_bow.png"
 };
@@ -57,4 +73,8 @@ void desenharSpriteNoChao(Sprite s, float centroX, float chaoY, float escala, in
     Rectangle destino = { centroX - largura / 2, chaoY - altura, largura, altura };
     Vector2 centro = { 0, 0 };
     DrawTexturePro(t, origem, destino, centro, 0, WHITE);
+}
+
+int quadroAnimacao(void) {
+    return (int)(GetTime() * 8) % QUADROS;
 }

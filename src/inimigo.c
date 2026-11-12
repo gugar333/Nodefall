@@ -67,7 +67,7 @@ int contarInimigos(Inimigo *lista) {
 void desenharInimigos(Inimigo *lista){
     for (Inimigo *i = lista; i != NULL; i = i->prox){
         DadosInimigo d = tabela[i->tipo];
-        desenharSpriteNoChao(d.sprite, i->x, i->y + i->raio, d.escala, i->olhandoEsquerda);
+        desenharSpriteNoChao(d.sprite + quadroAnimacao(), i->x, i->y + i->raio, d.escala, i->olhandoEsquerda);
     }
 }
 

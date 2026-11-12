@@ -16,6 +16,7 @@ void iniciarJogador(Jogador *p, float x, float y) {
     p->recarga = 0;
     p->tempoGolpe = 0;
     p->olhandoEsquerda = 0;
+    p->andando = 0;
 }
 
 void atualizarJogador(Jogador *p, float dt, int portaTravada) {
@@ -36,6 +37,7 @@ void atualizarJogador(Jogador *p, float dt, int portaTravada) {
 
     if (dx < 0) p->olhandoEsquerda = 1;
     if (dx > 0) p->olhandoEsquerda = 0;
+    p->andando = (dx != 0 || dy != 0);
 
     float novoX = p->x + dx * p->veloc * dt;
     if (!colide(novoX, p->y, portaTravada)) p->x = novoX;
@@ -47,7 +49,8 @@ void atualizarJogador(Jogador *p, float dt, int portaTravada) {
 void desenharJogador(const Jogador *p) {
     if (p->invulnerab > 0 && (int)(p->invulnerab * 10) % 2 == 0) return;
 
-    desenharSpriteNoChao(SPR_CAVALEIRO, p->x, p->y + 14, 2.5f, p->olhandoEsquerda);
+    Sprite base = p->andando ? SPR_CAVALEIRO_CORRENDO : SPR_CAVALEIRO_PARADO;
+    desenharSpriteNoChao(base + quadroAnimacao(), p->x, p->y + 14, 2.5f, p->olhandoEsquerda);
 
     float armaX = p->olhandoEsquerda ? p->x - 36 : p->x + 8;
     desenharArma(p->arma, armaX, p->y - 16, 0.7f, p->olhandoEsquerda);
