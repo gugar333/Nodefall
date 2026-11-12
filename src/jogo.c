@@ -25,6 +25,7 @@ static void entrarNoEstado(Jogo *j, Estado e) {
     else if (e == ESTADO_BOSS) mudarSala(2);
     else if (e == ESTADO_TESOURO) mudarSala(3);
     liberar(&j->inimigos);
+    liberarFlechas(&j->flechas);
     if (e == ESTADO_ONDAS) {
         inserirInimigo(&j->inimigos, INIMIGO_SERVO,       2 * TAM + TAM / 2, 2 * TAM + TAM / 2);
         inserirInimigo(&j->inimigos, INIMIGO_CORREDOR,    17 * TAM + TAM / 2, 2 * TAM + TAM / 2);
@@ -108,9 +109,18 @@ static void atacarComEspada(Jogo *j) {
     removerMortos(&j->inimigos);
 }
 
+static void atacarComArco(Jogo *j) {
+    if (j->jogador.arma != ARMA_ARCO) return;
+    if (!IsKeyPressed(KEY_SPACE) || j->jogador.recarga > 0) return;
+
+    j->jogador.recarga = 0.5f;   // intervalo entre os tiros
+    dispararFlecha(&j->flechas, j->jogador.x, j->jogador.y, j->jogador.dirX, j->jogador.dirY);
+}
+
 void iniciarJogo(Jogo *j) {
     iniciarJogador(&j->jogador, INICIO_X, INICIO_Y);
     j->inimigos = NULL;
+    j->flechas = NULL;
     j->onda = 0;
     j->portaTravada = 0;
     entrarNoEstado(j, ESTADO_ARSENAL);
@@ -130,6 +140,9 @@ void atualizarJogo(Jogo *j) {
         atualizarJogador(&j->jogador, GetFrameTime(), j->portaTravada);
         atualizarInimigos(j->inimigos, j->jogador.x, j->jogador.y, GetFrameTime());
         atacarComEspada(j);
+        atacarComArco(j);
+        atualizarFlechas(&j->flechas, j->inimigos, j->jogador.ataque, GetFrameTime());
+        removerMortos(&j->inimigos);
         verificarDano(j);
         if (j->estado == ESTADO_ONDAS && contarInimigos(j->inimigos) == 0) {
             j->portaTravada = 0;
@@ -158,6 +171,7 @@ void desenharJogo(const Jogo *j) {
             desenharArsenal(j);
         }
         desenharInimigos(j->inimigos);
+        desenharFlechas(j->flechas);
         desenharJogador(&j->jogador);
     }
         if (j->estado == ESTADO_DERROTA) {
@@ -172,4 +186,5 @@ void desenharJogo(const Jogo *j) {
 
 void encerrarJogo(Jogo *j) {
     liberar(&j->inimigos);
+    liberarFlechas(&j->flechas);
 }
