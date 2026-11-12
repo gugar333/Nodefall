@@ -6,9 +6,9 @@
 #define INICIO_X (COLUNAS * TAM / 2.0f)
 #define INICIO_Y (9 * TAM + TAM / 2.0f)
 #define NUM_ONDAS 3
-static const char *nomesEstados[ESTADO_TOTAL] = {
-    "MENU", "ARSENAL", "ONDAS", "BOSS", "TESOURO", "VITORIA", "DERROTA"
-};
+#define VIDA_MAX 5
+
+
 
 static const Rectangle pedestalEspada = { 4 * TAM, 5 * TAM, TAM, 2 * TAM };
 static const Rectangle pedestalArco = { 15 * TAM, 5 * TAM, TAM, 2 * TAM };
@@ -188,6 +188,36 @@ void atualizarJogo(Jogo *j) {
     }
 }
 
+static char *nomeArma(Arma a) {
+    if (a == ARMA_ESPADA) return "Espada";
+    if (a == ARMA_ARCO) return "Arco";
+    return "Nenhuma";
+}
+
+static void desenharHUD(const Jogo *j) {
+    DrawRectangle(0, 0, 330, 32, Fade(BLACK, 0.65f));
+
+    DrawText("Vida", 10, 7, 18, WHITE);
+    int vida = (int)j->jogador.vida;
+    for (int k = 0; k < VIDA_MAX; k++) {
+        Color cor = (k < vida) ? RED : DARKGRAY;
+        DrawRectangle(60 + k * 22, 7, 18, 18, cor);
+    }
+
+    DrawText(TextFormat("Arma: %s", nomeArma(j->jogador.arma)), 190, 7, 18, WHITE);
+
+    const char *texto;
+    if (j->estado == ESTADO_ONDAS) {
+        texto = TextFormat("Onda %d/%d   Inimigos: %d", j->onda, NUM_ONDAS, contarInimigos(j->inimigos));
+    } else {
+        texto = TextFormat("Onda -   Inimigos: %d", contarInimigos(j->inimigos));
+    }
+    int largura = MeasureText(texto, 18);
+    int xPainel = COLUNAS * TAM - largura - 20;
+    DrawRectangle(xPainel, 0, largura + 20, 32, Fade(BLACK, 0.65f));
+    DrawText(texto, xPainel + 10, 7, 18, WHITE);
+}
+
 
 
 
@@ -200,15 +230,13 @@ void desenharJogo(const Jogo *j) {
         desenharInimigos(j->inimigos);
         desenharFlechas(j->flechas);
         desenharJogador(&j->jogador);
+        desenharHUD(j);
     }
         if (j->estado == ESTADO_DERROTA) {
-        const char *msg = "Voce perdeu! Aperte ENTER para tentar de novo";
+        char *msg = "Voce perdeu! Aperte ENTER para tentar de novo";
         int largura = MeasureText(msg, 24);
         DrawText(msg, (COLUNAS * TAM - largura) / 2, LINHAS * TAM / 2, 24, RED);
     }
-
-    DrawText(nomesEstados[j->estado], 10, 10, 20, WHITE);
-    DrawText(TextFormat("Vida: %d", (int)j->jogador.vida), COLUNAS * TAM - 100, 10, 20, WHITE);
 }
 
 void encerrarJogo(Jogo *j) {
