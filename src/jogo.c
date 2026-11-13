@@ -170,10 +170,6 @@ static void iniciarOnda(Jogo *j) {
 }
 
 void atualizarJogo(Jogo *j) {
-    if (IsKeyPressed(KEY_N)) {
-        entrarNoEstado(j, (j->estado + 1) % ESTADO_TOTAL);
-    }
-
     if (j->estado == ESTADO_VITORIA || j->estado == ESTADO_DERROTA) {
         if (telaFimAtualizar()) iniciarJogo(j);
     }
@@ -251,7 +247,7 @@ void desenharJogo(const Jogo *j) {
         desenharJogador(&j->jogador);
         desenharHUD(j);
     }
-    if (j->estado == ESTADO_DERROTA) telaFimDesenhar(1);
+    if (j->estado == ESTADO_VITORIA) telaFimDesenhar(1);
     else if (j->estado == ESTADO_DERROTA) telaFimDesenhar(0);
     
 }
