@@ -5,9 +5,10 @@
 
 void desenharPlacar(const Registro *listaRegistros, int posicaoYInicial);
 
-void telaFimIniciar(int pontuacaoFinal);
+void telaFimIniciar(int pontuacaoFinal, int venceu);
 int telaFimAtualizar(void);          
 void telaFimDesenhar(int jogadorVenceu);
 void telaFimEncerrar(void);
+
 
 #endif

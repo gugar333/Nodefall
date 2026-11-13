@@ -43,7 +43,8 @@ static void entrarNoEstado(Jogo *j, Estado e) {
     liberar(&j->inimigos);
     liberarFlechas(&j->flechas);
     if (e == ESTADO_VITORIA || e == ESTADO_DERROTA) {
-        telaFimIniciar(calcularPontuacao(j, e == ESTADO_VITORIA));
+        int venceu = (e == ESTADO_VITORIA);
+        telaFimIniciar(calcularPontuacao(j, venceu), venceu);
     }
     if (e == ESTADO_ONDAS) {
         j->onda = 0;

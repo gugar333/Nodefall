@@ -22,14 +22,14 @@ static int tamanhoNomeDigitado = 0;
 static int pontuacaoDaPartida = 0;
 static FaseDaTela faseDaTela = FASE_MOSTRANDO_PLACAR;
 
-void telaFimIniciar(int pontuacaoFinal) {
+void telaFimIniciar(int pontuacaoFinal, int venceu) {
     liberarPlacar(&placarAtual);
     placarAtual = carregarPlacar(ARQUIVO_PLACAR);
     pontuacaoDaPartida = pontuacaoFinal;
     nomeDigitado[0] = '\0';
     tamanhoNomeDigitado = 0;
-    faseDaTela = entraNoPlacar(placarAtual, pontuacaoFinal) ? FASE_DIGITANDO_NOME
-                                                             : FASE_MOSTRANDO_PLACAR;
+    faseDaTela = (venceu && entraNoPlacar(placarAtual, pontuacaoFinal)) ? FASE_DIGITANDO_NOME
+                                                                        : FASE_MOSTRANDO_PLACAR;
 }
 
 int telaFimAtualizar(void) {
