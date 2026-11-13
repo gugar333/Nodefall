@@ -15,8 +15,8 @@ typedef struct {
 } DadosInimigo;
 
 static DadosInimigo tabela[INIMIGO_TIPOS] = {
-    {100.0f, 3.0f, 1.0f, 14.0f, SPR_ESQUELETO, 2.5f},
-    {130.0f, 1.0f, 1.0f, 10.0f, SPR_DIABINHO, 2.0f},
+    {90.0f, 3.0f, 1.0f, 14.0f, SPR_ESQUELETO, 2.5f},
+    {115.0f, 1.0f, 1.0f, 10.0f, SPR_DIABINHO, 2.0f},
     {70.0f, 12.0f, 3.0f, 22.0f, SPR_OGRO, 2.0f}
 };
 

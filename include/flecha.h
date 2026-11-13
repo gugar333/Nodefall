@@ -3,6 +3,7 @@
 
 #include "raylib.h"
 #include "inimigo.h"
+#include "boss.h"
 
 typedef struct Flecha {
     float x, y;
@@ -11,7 +12,7 @@ typedef struct Flecha {
 } Flecha;
 
 void dispararFlecha(Flecha **lista, float x, float y, float dirX, float dirY);
-void atualizarFlechas(Flecha **lista, Inimigo *inimigos, float dano, float dt);
+void atualizarFlechas(Flecha **lista, Inimigo *inimigos, Boss *boss, float dano, float dt);
 void desenharFlechas(const Flecha *lista);
 void liberarFlechas(Flecha **lista);
 

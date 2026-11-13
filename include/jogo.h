@@ -4,6 +4,7 @@
 #include "jogador.h"
 #include "inimigo.h"
 #include "flecha.h"
+#include "boss.h"
 
 typedef enum {
     ESTADO_MENU,
@@ -21,6 +22,7 @@ typedef struct Jogo {
     Jogador jogador;
     Inimigo *inimigos;
     Flecha *flechas;
+    Boss boss;
     int onda;
     int abates;
     int portaTravada;

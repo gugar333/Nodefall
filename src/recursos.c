@@ -47,7 +47,11 @@ static const char *arquivos[SPR_TOTAL] = {
     "assets/coin_anim_f0.png",
     "assets/coin_anim_f1.png",
     "assets/coin_anim_f2.png",
-    "assets/coin_anim_f3.png"
+    "assets/coin_anim_f3.png",
+    "assets/big_demon_run_anim_f0.png",
+    "assets/big_demon_run_anim_f1.png",
+    "assets/big_demon_run_anim_f2.png",
+    "assets/big_demon_run_anim_f3.png"
 };
 
 static Texture2D texturas[SPR_TOTAL];

@@ -21,7 +21,7 @@ void dispararFlecha(Flecha **lista, float x, float y, float dirX, float dirY) {
     *lista = nova;
 }
 
-void atualizarFlechas(Flecha **lista, Inimigo *inimigos, float dano, float dt) {
+void atualizarFlechas(Flecha **lista, Inimigo *inimigos, Boss *boss, float dano, float dt) {
     Flecha **pp = lista;
     while (*pp != NULL) {
         Flecha *f = *pp;
@@ -38,6 +38,10 @@ void atualizarFlechas(Flecha **lista, Inimigo *inimigos, float dano, float dt) {
                     remover = 1;
                     break;
                 }
+            }
+                if (!remover && boss->vivo && CheckCollisionPointRec(ponto, retanguloBoss(boss))) {
+                boss->vida -= dano;
+                remover = 1;
             }
         }
 

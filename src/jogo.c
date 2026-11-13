@@ -42,6 +42,10 @@ static void entrarNoEstado(Jogo *j, Estado e) {
     else if (e == ESTADO_TESOURO) mudarSala(3);
     liberar(&j->inimigos);
     liberarFlechas(&j->flechas);
+    j->boss.vivo = 0;
+    if (e == ESTADO_BOSS) {
+        iniciarBoss(&j->boss, COLUNAS * TAM / 2.0f, 4 * TAM);
+    }
     if (e == ESTADO_VITORIA || e == ESTADO_DERROTA) {
         int venceu = (e == ESTADO_VITORIA);
         telaFimIniciar(calcularPontuacao(j, venceu), venceu);
@@ -55,7 +59,7 @@ static void entrarNoEstado(Jogo *j, Estado e) {
         j->jogador.y = INICIO_Y;
     }
 
-    j->portaTravada = (e == ESTADO_ARSENAL && j->jogador.arma == ARMA_NENHUMA) || e == ESTADO_ONDAS;
+    j->portaTravada = (e == ESTADO_ARSENAL && j->jogador.arma == ARMA_NENHUMA) || e == ESTADO_ONDAS || e == ESTADO_BOSS;
 }
 
 static Rectangle alcance(Rectangle pedestal) {
@@ -105,6 +109,11 @@ static void verificarDano(Jogo *j) {
         }
     }
 
+    if (j->jogador.invulnerab <= 0 && j->boss.vivo && CheckCollisionRecs(r, retanguloBoss(&j->boss))) {
+        j->jogador.vida -= j->boss.dano;
+        j->jogador.invulnerab = 1.0f;
+    }
+
     if (j->jogador.vida <= 0) {
         entrarNoEstado(j, ESTADO_DERROTA);
     }
@@ -124,7 +133,19 @@ static void atacarComEspada(Jogo *j) {
         }
     }
 
+    if (j->boss.vivo && CheckCollisionRecs(golpe, retanguloBoss(&j->boss))) {
+        j->boss.vida -= j->jogador.ataque;
+    }
+
     limparMortos(j);
+}
+
+static void verificarBoss(Jogo *j) {
+    if (j->boss.vivo && j->boss.vida <= 0) {
+        j->boss.vivo = 0;
+        j->abates += 10;
+        j->portaTravada = 0;
+    }
 }
 
 static void atacarComArco(Jogo *j) {
@@ -176,12 +197,20 @@ void atualizarJogo(Jogo *j) {
     }
 
     if (emSala(j->estado)) {
+        
+        if (IsKeyPressed(KEY_N) && j->estado != ESTADO_TESOURO) {
+            entrarNoEstado(j, j->estado + 1);
+            return;
+        }
+
         atualizarJogador(&j->jogador, GetFrameTime(), j->portaTravada);
         atualizarInimigos(j->inimigos, j->jogador.x, j->jogador.y, GetFrameTime());
+        atualizarBoss(&j->boss, j->jogador.x, j->jogador.y, GetFrameTime());
         atacarComEspada(j);
         atacarComArco(j);
-        atualizarFlechas(&j->flechas, j->inimigos, j->jogador.ataque, GetFrameTime());
+        atualizarFlechas(&j->flechas, j->inimigos, &j->boss, j->jogador.ataque, GetFrameTime());
         limparMortos(j);
+        verificarBoss(j);
         verificarDano(j);
         if (j->estado == ESTADO_ONDAS && contarInimigos(j->inimigos) == 0) {
             if (j->onda < NUM_ONDAS) iniciarOnda(j);   
@@ -234,9 +263,6 @@ static void desenharHUD(const Jogo *j) {
     DrawText(texto, xPainel + 10, 7, 18, WHITE);
 }
 
-
-
-
 void desenharJogo(const Jogo *j) {
     if (emSala(j->estado)) {
         desenharSala(j->portaTravada);
@@ -244,9 +270,11 @@ void desenharJogo(const Jogo *j) {
             desenharArsenal(j);
         }
         desenharInimigos(j->inimigos);
+        desenharBoss(&j->boss);
         desenharFlechas(j->flechas);
         desenharJogador(&j->jogador);
         desenharHUD(j);
+        desenharBarraBoss(&j->boss);
     }
     if (j->estado == ESTADO_VITORIA) telaFimDesenhar(1);
     else if (j->estado == ESTADO_DERROTA) telaFimDesenhar(0);
