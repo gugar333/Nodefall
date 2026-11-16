@@ -16,5 +16,6 @@ static void desenharTextoCentralizado(const char *texto, int posicaoY, int taman
 
 void desenharMenu(void) {
     desenharTextoCentralizado("NODEFALL", ALTURA_TELA / 3, 80, GOLD);
+    desenharTextoCentralizado("Se a dor não me matar, ela apenas me tornará mais forte", ALTURA_TELA / 3 + 100, 18, LIGHTGRAY);
     desenharTextoCentralizado("Aperte ENTER para entrar na masmorra", ALTURA_TELA * 2 / 3, 20, RAYWHITE);
 }
