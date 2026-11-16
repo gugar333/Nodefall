@@ -3,6 +3,7 @@
 #include "jogo.h"
 #include "sala.h"
 #include "telafim.h"
+#include "menu.h"
 
 #define INICIO_X (COLUNAS * TAM / 2.0f)
 #define INICIO_Y (9 * TAM + TAM / 2.0f)
@@ -163,7 +164,7 @@ void iniciarJogo(Jogo *j) {
     j->abates = 0;
     j->onda = 0;
     j->portaTravada = 0;
-    entrarNoEstado(j, ESTADO_ARSENAL);
+    entrarNoEstado(j, ESTADO_MENU);
 }
 
 static int composicaoOndas [NUM_ONDAS][INIMIGO_TIPOS] = {
@@ -192,6 +193,11 @@ static void iniciarOnda(Jogo *j) {
 }
 
 void atualizarJogo(Jogo *j) {
+    if (j->estado == ESTADO_MENU) {
+        if (atualizarMenu()) entrarNoEstado(j, ESTADO_ARSENAL);
+        return;
+    }
+
     if (j->estado == ESTADO_VITORIA || j->estado == ESTADO_DERROTA) {
         if (telaFimAtualizar()) iniciarJogo(j);
     }
@@ -264,6 +270,8 @@ static void desenharHUD(const Jogo *j) {
 }
 
 void desenharJogo(const Jogo *j) {
+    if (j->estado == ESTADO_MENU) desenharMenu();
+
     if (emSala(j->estado)) {
         desenharSala(j->portaTravada);
         if (j->estado == ESTADO_ARSENAL) {
