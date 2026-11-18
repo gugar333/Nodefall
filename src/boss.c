@@ -10,7 +10,7 @@ void iniciarBoss(Boss *b, float x, float y) {
     b->y = y;
     b->vidaMax = 30;
     b->vida = b->vidaMax;
-    b->veloc = 100;
+    b->veloc = 90;
     b->dano = 2;
     b->raio = 30;
     b->vivo = 1;
@@ -23,7 +23,7 @@ void atualizarBoss(Boss *b, float alvoX, float alvoY, float dt) {
 
     if (b->fase == 1 && b->vida <= b->vidaMax / 2) {
         b->fase = 2;
-        b->veloc = 160;
+        b->veloc = 120;
         b->dano = 3;
         b->raio = 36;
         tocarSom(SOM_DESPERTAR);
