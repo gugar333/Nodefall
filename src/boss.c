@@ -13,11 +13,18 @@ void iniciarBoss(Boss *b, float x, float y) {
     b->dano = 2;
     b->raio = 30;
     b->vivo = 1;
+    b->fase = 1;
     b->olhandoEsquerda = 0;
 }
 
 void atualizarBoss(Boss *b, float alvoX, float alvoY, float dt) {
     if (!b->vivo) return;
+
+    if (b->fase == 1 && b->vida <= b->vidaMax / 2) {
+        b->fase = 2;
+        b->veloc = 160;
+        b->dano = 3;
+    }
 
     float dx = alvoX - b->x;
     float dy = alvoY - b->y;

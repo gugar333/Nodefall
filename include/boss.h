@@ -10,6 +10,7 @@ typedef struct Boss {
     float dano;
     float raio;
     int vivo;
+    int fase;
     int olhandoEsquerda;
 } Boss;
 
