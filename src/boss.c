@@ -24,6 +24,7 @@ void atualizarBoss(Boss *b, float alvoX, float alvoY, float dt) {
         b->fase = 2;
         b->veloc = 160;
         b->dano = 3;
+        b->raio = 36;
     }
 
     float dx = alvoX - b->x;
@@ -42,7 +43,11 @@ void atualizarBoss(Boss *b, float alvoX, float alvoY, float dt) {
 
 void desenharBoss(const Boss *b) {
     if (!b->vivo) return;
-    desenharSpriteNoChao(SPR_DEMONIO + quadroAnimacao(QUADROS), b->x, b->y + b->raio, 3.0f, b->olhandoEsquerda);
+    if (b->fase == 2) {
+        desenharSpriteNoChaoComCor(SPR_DEMONIO + quadroAnimacao(QUADROS), b->x, b->y + b->raio, 3.6f, b->olhandoEsquerda, PURPLE);
+    } else {
+        desenharSpriteNoChao(SPR_DEMONIO + quadroAnimacao(QUADROS), b->x, b->y + b->raio, 3.0f, b->olhandoEsquerda);
+    }
 }
 
 void desenharBarraBoss(const Boss *b) {
