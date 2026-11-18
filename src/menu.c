@@ -30,9 +30,9 @@ void desenharMenu(void) {
     Vector2 centro = { 0, 0 };
     DrawTexturePro(fundoMenu, origem, destino, centro, 0, WHITE);
 
-    desenharTextoCentralizado("NODEFALL", 45, 80, GOLD);
+    desenharTextoCentralizado("NODEFALL", 35, 80, GOLD);
+    desenharTextoCentralizado("Se a dor não me matar, ela apenas me tornará mais forte", 125, 18, LIGHTGRAY);
 
-    DrawRectangle(0, ALTURA_TELA - 88, LARGURA_TELA, 88, Fade(BLACK, 0.6f));
-    desenharTextoCentralizado("Se a dor não me matar, ela apenas me tornará mais forte", ALTURA_TELA - 75, 18, LIGHTGRAY);
-    desenharTextoCentralizado("Aperte ENTER para entrar na masmorra", ALTURA_TELA - 40, 20, RAYWHITE);
+    DrawRectangle(0, ALTURA_TELA - 55, LARGURA_TELA, 55, Fade(BLACK, 0.6f));
+    desenharTextoCentralizado("Aperte ENTER para entrar na masmorra", ALTURA_TELA - 38, 20, RAYWHITE);
 }
