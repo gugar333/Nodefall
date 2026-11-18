@@ -3,12 +3,14 @@
 #include "jogo.h"
 #include "recursos.h"
 #include "som.h"
+#include "menu.h"
 
 int main(void) {
     InitWindow(COLUNAS * TAM, LINHAS * TAM, "Nodefall");
     SetTargetFPS(60);
     carregarRecursos();
     carregarSons();
+    carregarMenu();
 
     Jogo jogo;
     iniciarJogo(&jogo);
@@ -23,6 +25,7 @@ int main(void) {
     }
 
     encerrarJogo(&jogo);
+    descarregarMenu();
     descarregarSons();
     descarregarRecursos();
     CloseWindow();
