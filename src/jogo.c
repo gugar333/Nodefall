@@ -4,6 +4,7 @@
 #include "sala.h"
 #include "telafim.h"
 #include "menu.h"
+#include "som.h"
 
 #define INICIO_X (COLUNAS * TAM / 2.0f)
 #define INICIO_Y (9 * TAM + TAM / 2.0f)
@@ -31,7 +32,9 @@ static int calcularPontuacao(const Jogo *j, int venceu) {
 static void limparMortos(Jogo *j) {
     int antes = contarInimigos(j->inimigos);
     removerMortos(&j->inimigos);
-    j->abates += antes - contarInimigos(j->inimigos);
+    int depois = contarInimigos(j->inimigos);
+    if (depois < antes) tocarSom(SOM_INIMIGO_MORRE);
+    j->abates += antes - depois;
 }
 
 static void entrarNoEstado(Jogo *j, Estado e) {
@@ -49,6 +52,8 @@ static void entrarNoEstado(Jogo *j, Estado e) {
     }
     if (e == ESTADO_VITORIA || e == ESTADO_DERROTA) {
         int venceu = (e == ESTADO_VITORIA);
+        if (venceu) tocarSom(SOM_VITORIA);
+        else tocarSom(SOM_DERROTA);
         telaFimIniciar(calcularPontuacao(j, venceu), venceu);
     }
     if (e == ESTADO_ONDAS) {
@@ -108,6 +113,7 @@ static void verificarDano(Jogo *j) {
         if (CheckCollisionRecs(r, retanguloInimigo(i))) {
             j->jogador.vida -= i->dano;
             j->jogador.invulnerab = 1.0f;
+            tocarSom(SOM_DANO);
             break;
         }
     }
@@ -115,6 +121,7 @@ static void verificarDano(Jogo *j) {
     if (j->jogador.invulnerab <= 0 && j->boss.vivo && CheckCollisionRecs(r, retanguloBoss(&j->boss))) {
         j->jogador.vida -= j->boss.dano;
         j->jogador.invulnerab = 1.0f;
+        tocarSom(SOM_DANO);
     }
 
     if (j->jogador.vida <= 0) {
@@ -128,6 +135,7 @@ static void atacarComEspada(Jogo *j) {
 
     j->jogador.recarga = 0.4f;
     j->jogador.tempoGolpe = 0.15f;
+    tocarSom(SOM_ESPADA);
 
     Rectangle golpe = areaGolpe(&j->jogador);
     for (Inimigo *i = j->inimigos; i != NULL; i = i->prox) {
@@ -157,6 +165,7 @@ static void atacarComArco(Jogo *j) {
 
     j->jogador.recarga = 0.5f;   
     dispararFlecha(&j->flechas, j->jogador.x, j->jogador.y, j->jogador.dirX, j->jogador.dirY);
+    tocarSom(SOM_FLECHA);
 }
 
 void iniciarJogo(Jogo *j) {

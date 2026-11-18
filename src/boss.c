@@ -3,6 +3,7 @@
 #include "boss.h"
 #include "sala.h"
 #include "recursos.h"
+#include "som.h"
 
 void iniciarBoss(Boss *b, float x, float y) {
     b->x = x;
@@ -25,6 +26,7 @@ void atualizarBoss(Boss *b, float alvoX, float alvoY, float dt) {
         b->veloc = 160;
         b->dano = 3;
         b->raio = 36;
+        tocarSom(SOM_DESPERTAR);
     }
 
     float dx = alvoX - b->x;
