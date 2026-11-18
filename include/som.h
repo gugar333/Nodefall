@@ -15,5 +15,8 @@ typedef enum {
 void carregarSons(void);
 void descarregarSons(void);
 void tocarSom(Som som);
+void tocarMusicaMenu(void);
+void atualizarMusica(void);
+void pararMusicaMenu(void);
 
 #endif

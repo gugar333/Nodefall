@@ -205,7 +205,12 @@ static void iniciarOnda(Jogo *j) {
 
 void atualizarJogo(Jogo *j) {
     if (j->estado == ESTADO_MENU) {
-        if (atualizarMenu()) entrarNoEstado(j, ESTADO_ARSENAL);
+        tocarMusicaMenu();
+        atualizarMusica();
+        if (atualizarMenu()) {
+            pararMusicaMenu();
+            entrarNoEstado(j, ESTADO_ARSENAL);
+        }
         return;
     }
 
