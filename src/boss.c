@@ -58,10 +58,18 @@ void desenharBarraBoss(const Boss *b) {
     int y = 44;
     float proporcao = b->vida / b->vidaMax;
 
-    DrawText("DEMONIO", x, y - 2, 18, WHITE);
-    DrawRectangle(x + 90, y, largura - 90, 16, DARKGRAY);
-    DrawRectangle(x + 90, y, (largura - 90) * proporcao, 16, RED);
-    DrawRectangleLines(x + 90, y, largura - 90, 16, BLACK);
+    const char *nome = "DEMONIO";
+    Color cor = RED;
+    if (b->fase == 2) {
+        nome = "DEMONIO DESPERTADO";
+        cor = PURPLE;
+    }
+    int larguraNome = MeasureText(nome, 18) + 10;
+
+    DrawText(nome, x, y - 2, 18, WHITE);
+    DrawRectangle(x + larguraNome, y, largura - larguraNome, 16, DARKGRAY);
+    DrawRectangle(x + larguraNome, y, (largura - larguraNome) * proporcao, 16, cor);
+    DrawRectangleLines(x + larguraNome, y, largura - larguraNome, 16, BLACK);
 }
 
 Rectangle retanguloBoss(const Boss *b) {
