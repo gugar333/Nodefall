@@ -79,6 +79,8 @@ static void atualizarArsenal(Jogo *j) {
     } else if (CheckCollisionRecs(r, alcance(pedestalArco))) {
         j->jogador.arma = ARMA_ARCO;
         j->jogador.ataque = 1;
+        j->jogador.veloc = 250;
+        j->jogador.vida = 4;
     }
 
     if (j->jogador.arma != ARMA_NENHUMA) {
