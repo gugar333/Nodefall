@@ -94,6 +94,16 @@ void desenharSpriteNoChao(Sprite s, float centroX, float chaoY, float escala, in
     DrawTexturePro(t, origem, destino, centro, 0, WHITE);
 }
 
+void desenharSpriteNoChaoComCor(Sprite s, float centroX, float chaoY, float escala, int virado, Color cor) {
+    Texture2D t = texturas[s];
+    float largura = t.width * escala;
+    float altura = t.height * escala;
+    Rectangle origem = { 0, 0, virado ? -t.width : t.width, t.height };
+    Rectangle destino = { centroX - largura / 2, chaoY - altura, largura, altura };
+    Vector2 centro = { 0, 0 };
+    DrawTexturePro(t, origem, destino, centro, 0, cor);
+}
+
 int quadroAnimacao(int total) {
     return (int)(GetTime() * 8) % total;
 }

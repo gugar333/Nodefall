@@ -38,6 +38,7 @@ void descarregarRecursos(void);
 void desenharSprite(Sprite s, float x, float y, float largura, float altura);
 void desenharSpriteGirado(Sprite s, float x, float y, float tamanho, float angulo);
 void desenharSpriteNoChao(Sprite s, float centroX, float chaoY, float escala, int virado);
+void desenharSpriteNoChaoComCor(Sprite s, float centroX, float chaoY, float escala, int virado, Color cor);
 int quadroAnimacao(int total);
 
 #endif
