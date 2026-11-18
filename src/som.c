@@ -8,7 +8,8 @@ static const char *arquivosSom[SOM_TOTAL] = {
     "assets/sons/dano.wav",
     "assets/sons/despertar.wav",
     "assets/sons/vitoria.wav",
-    "assets/sons/derrota.wav"
+    "assets/sons/derrota.wav",
+    "assets/sons/boss_morre.wav"
 };
 
 static Sound sons[SOM_TOTAL];

@@ -9,6 +9,7 @@ typedef enum {
     SOM_DESPERTAR,
     SOM_VITORIA,
     SOM_DERROTA,
+    SOM_BOSS_MORRE,
     SOM_TOTAL
 } Som;
 

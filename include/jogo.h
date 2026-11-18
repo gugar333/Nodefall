@@ -26,6 +26,7 @@ typedef struct Jogo {
     int onda;
     int abates;
     int portaTravada;
+    int pausado;
 } Jogo;
 
 void iniciarJogo(Jogo *j);

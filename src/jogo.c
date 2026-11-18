@@ -155,6 +155,7 @@ static void verificarBoss(Jogo *j) {
     if (j->boss.vivo && j->boss.vida <= 0) {
         j->boss.vivo = 0;
         j->abates += 10;
+        tocarSom(SOM_BOSS_MORRE);
         j->portaTravada = 0;
     }
 }
@@ -175,6 +176,7 @@ void iniciarJogo(Jogo *j) {
     j->abates = 0;
     j->onda = 0;
     j->portaTravada = 0;
+    j->pausado = 0;
     entrarNoEstado(j, ESTADO_MENU);
 }
 
@@ -219,7 +221,9 @@ void atualizarJogo(Jogo *j) {
     }
 
     if (emSala(j->estado)) {
-        
+        if (IsKeyPressed(KEY_P)) j->pausado = !j->pausado;
+        if (j->pausado) return;
+
         if (IsKeyPressed(KEY_N) && j->estado != ESTADO_TESOURO) {
             entrarNoEstado(j, j->estado + 1);
             return;
@@ -299,6 +303,14 @@ void desenharJogo(const Jogo *j) {
         desenharJogador(&j->jogador);
         desenharHUD(j);
         desenharBarraBoss(&j->boss);
+
+        if (j->pausado) {
+            DrawRectangle(0, 0, COLUNAS * TAM, LINHAS * TAM, Fade(BLACK, 0.6f));
+            const char *titulo = "PAUSADO";
+            const char *dica = "Aperte P para continuar";
+            DrawText(titulo, (COLUNAS * TAM - MeasureText(titulo, 50)) / 2, LINHAS * TAM / 2 - 40, 50, WHITE);
+            DrawText(dica, (COLUNAS * TAM - MeasureText(dica, 20)) / 2, LINHAS * TAM / 2 + 25, 20, LIGHTGRAY);
+        }
     }
     if (j->estado == ESTADO_VITORIA) telaFimDesenhar(1);
     else if (j->estado == ESTADO_DERROTA) telaFimDesenhar(0);
