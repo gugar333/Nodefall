@@ -223,12 +223,6 @@ void atualizarJogo(Jogo *j) {
     if (emSala(j->estado)) {
         if (IsKeyPressed(KEY_P)) j->pausado = !j->pausado;
         if (j->pausado) return;
-
-        if (IsKeyPressed(KEY_N) && j->estado != ESTADO_TESOURO) {
-            entrarNoEstado(j, j->estado + 1);
-            return;
-        }
-
         atualizarJogador(&j->jogador, GetFrameTime(), j->portaTravada);
         atualizarInimigos(j->inimigos, j->jogador.x, j->jogador.y, GetFrameTime());
         atualizarBoss(&j->boss, j->jogador.x, j->jogador.y, GetFrameTime());
