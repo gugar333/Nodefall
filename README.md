@@ -22,6 +22,7 @@ Você é um cavaleiro que atravessa 4 salas até chegar ao tesouro:
 | `WASD` / setas | Mover |
 | `ESPAÇO` | Atacar |
 | `E` | Pegar arma |
+| `P` | Pausar / continuar |
 | `ENTER` | Confirmar / jogar de novo |
 | `ESC` | Sair |
 
@@ -82,6 +83,22 @@ endif
 | `cannot find -lraylib` | Instale a raylib (passo 2 do Linux). |
 | Build parando por *warning* | Remova `-Werror` do `CFLAGS`. |
 | Janela sem texturas | Rode o jogo na raiz do projeto. |
+
+## 🧩 Conceitos de C usados
+
+| Conceito | Onde está |
+|---|---|
+| Structs | `Jogo`, `Jogador`, `Inimigo`, `Flecha`, `Boss`, `Registro` |
+| Ponteiros | Funções recebem ponteiros (`Jogo *j`); ponteiro para ponteiro na remoção das listas |
+| Alocação dinâmica | `malloc`/`free` de inimigos, flechas e registros do placar |
+| Listas encadeadas | Inimigos (`inimigo.c`), flechas (`flecha.c`) e placar ordenado (`placar.c`) |
+| Matrizes | Mapa das salas `salas[4][12][21]` (`sala.c`), composição das ondas (`jogo.c`) |
+| Arquivos | Leitura e escrita do ranking em `placar.txt` (`placar.c`) |
+
+## 🙏 Créditos
+
+- Sprites: [0x72 — DungeonTileset II](https://0x72.itch.io/dungeontileset-ii) (CC0)
+- Biblioteca: [raylib](https://www.raylib.com) (licença zlib)
 
 ## 👥 Integrantes
 
