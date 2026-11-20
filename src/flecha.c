@@ -3,6 +3,7 @@
 #include "raylib.h"
 #include "flecha.h"
 #include "sala.h"
+#include "recursos.h"
 
 #define VELOC_FLECHA 450.0f
 
@@ -56,10 +57,8 @@ void atualizarFlechas(Flecha **lista, Inimigo *inimigos, Boss *boss, float dano,
 
 void desenharFlechas(const Flecha *lista) {
     for (const Flecha *f = lista; f != NULL; f = f->prox) {
-        Vector2 ponta = { f->x, f->y };
-        Vector2 cauda = { f->x - f->dirX * 16, f->y - f->dirY * 16 };
-        DrawLineEx(cauda, ponta, 3, BROWN);
-        DrawCircleV(ponta, 3, LIGHTGRAY);
+        float angulo = atan2f(f->dirY, f->dirX) * RAD2DEG + 90;
+        desenharSpriteRotacionado(SPR_FLECHA, f->x - f->dirX * 15, f->y - f->dirY * 15, 1.5f, angulo);
     }
 }
 

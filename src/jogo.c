@@ -5,6 +5,7 @@
 #include "telafim.h"
 #include "menu.h"
 #include "som.h"
+#include "recursos.h"
 
 #define INICIO_X (COLUNAS * TAM / 2.0f)
 #define INICIO_Y (9 * TAM + TAM / 2.0f)
@@ -12,11 +13,9 @@
 #define VIDA_MAX 5
 
 
-
 static const Rectangle pedestalEspada = { 4 * TAM, 5 * TAM, TAM, 2 * TAM };
 static const Rectangle pedestalArco = { 15 * TAM, 5 * TAM, TAM, 2 * TAM };
 static void iniciarOnda(Jogo *j);
-
 
 
 static int emSala(Estado e) {
@@ -265,8 +264,8 @@ static void desenharHUD(const Jogo *j) {
     DrawText("Vida", 10, 7, 18, WHITE);
     int vida = (int)j->jogador.vida;
     for (int k = 0; k < VIDA_MAX; k++) {
-        Color cor = (k < vida) ? RED : DARKGRAY;
-        DrawRectangle(60 + k * 22, 7, 18, 18, cor);
+        Sprite coracao = (k < vida) ? SPR_CORACAO_CHEIO : SPR_CORACAO_VAZIO;
+        desenharSprite(coracao, 60 + k * 22, 6, 20, 18);
     }
 
     DrawText(TextFormat("Arma: %s", nomeArma(j->jogador.arma)), 190, 7, 18, WHITE);

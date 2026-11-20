@@ -30,7 +30,10 @@ typedef enum {
     SPR_CRANIO = SPR_FONTE_BACIA + QUADROS_FONTE,
     SPR_MOEDA,
     SPR_DEMONIO = SPR_MOEDA + QUADROS,
-    SPR_TOTAL = SPR_DEMONIO + QUADROS
+    SPR_CORACAO_CHEIO = SPR_DEMONIO + QUADROS,
+    SPR_CORACAO_VAZIO,
+    SPR_FLECHA,
+    SPR_TOTAL
 } Sprite;
 
 void carregarRecursos(void);
@@ -39,6 +42,7 @@ void desenharSprite(Sprite s, float x, float y, float largura, float altura);
 void desenharSpriteGirado(Sprite s, float x, float y, float tamanho, float angulo);
 void desenharSpriteNoChao(Sprite s, float centroX, float chaoY, float escala, int virado);
 void desenharSpriteNoChaoComCor(Sprite s, float centroX, float chaoY, float escala, int virado, Color cor);
+void desenharSpriteRotacionado(Sprite s, float centroX, float centroY, float escala, float angulo);
 int quadroAnimacao(int total);
 
 #endif
