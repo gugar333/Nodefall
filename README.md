@@ -38,6 +38,12 @@ Você é um cavaleiro que atravessa 4 salas até chegar ao tesouro:
 
 Requisitos: GCC e Make (MinGW-w64). A raylib já vem no repositório.
 
+Se não tiver o GCC e o Make, instale a raylib para Windows ([raylib.com](https://www.raylib.com)), que traz o `w64devkit` com os dois. No PowerShell, antes de compilar:
+
+```powershell
+$env:Path = "C:\raylib\w64devkit\bin;" + $env:Path
+```
+
 ```bash
 git clone https://github.com/gugar333/Nodefall.git
 cd Nodefall
@@ -59,7 +65,7 @@ make PLATFORM=PLATFORM_DESKTOP
 sudo make install
 cd ../..
 
-# 3. Compilar e rodar o jogo
+# 3. Compilar e rodar o jogo (antes, aplique o ajuste do LDFLAGS abaixo)
 git clone https://github.com/gugar333/Nodefall.git
 cd Nodefall
 make run
@@ -71,7 +77,7 @@ No Linux, o `Makefile` precisa usar as bibliotecas do sistema. Troque a linha `L
 ifeq ($(OS),Windows_NT)
     LDFLAGS = -Llib -lraylib -lgdi32 -lwinmm
 else
-    LDFLAGS = -lraylib -lm -lpthread -ldl -lrt -lX11
+    LDFLAGS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 endif
 ```
 
